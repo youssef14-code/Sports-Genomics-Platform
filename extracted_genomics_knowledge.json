@@ -1,0 +1,355 @@
+{
+  "schema_version": "2.0",
+  "schema_notes": {
+    "rules": [
+      "Extraction is abstract-only: nothing is added from outside knowledge except rsID normalization (variant names like R577X/I-D mapped to rsID).",
+      "Null/absent fields are omitted. recommendation is present ONLY if the abstract itself supports it.",
+      "variant_rsid: unified dbSNP rsID. variant_label keeps the original name when the abstract used one (e.g. R577X, I/D). rsid=null when the abstract does not identify a specific variant."
+    ],
+    "direction": "favorable | unfavorable | null | mixed  (effect of the listed allele on the stated category outcome; for Injury_Risk, favorable = protective)",
+    "evidence_level": "meta_analysis | systematic_review | gwas | case_control | rct | cohort | narrative_review | case_report | mechanistic",
+    "category": "Power | Endurance | Strength | Recovery | Injury_Risk | Nutrition | Metabolic | Behavior"
+  },
+  "data_quality_flags": [
+    "40141820: abstract says PPARA 'C' allele is 86.4% in athletes vs 14.1% in controls, which is implausible for rs4253778 (G is the common allele) -> likely allele-labeling issue in source paper; use with caution.",
+    "40650118: allele model OR=0.85 (<1) and recessive OR=1.29 point in different directions in the abstract; allele-to-risk mapping is ambiguous.",
+    "37588243: abstract says rs1800497 in methods but 'rs1800496' in results (typo in source).",
+    "33925504: editorial with NO abstract content ('[...]') -> no extractable findings. The old Gemini file listed 4 findings for it, which cannot come from the abstract.",
+    "37372415: old file had only 5 findings; the abstract lists ~22 allele-level markers (all included here)."
+  ],
+  "papers": [
+    {
+      "pmid": "37372415", "has_actionable_genomics": true,
+      "findings": [
+        {"gene_symbol":"AMPD1","variant_rsid":"rs17602729","allele":"C","category":"Endurance","direction":"favorable","evidence_level":"narrative_review","summary":"Among most promising endurance markers (positive in >=2 studies)."},
+        {"gene_symbol":"CDKN1A","variant_rsid":"rs236448","allele":"A","category":"Endurance","direction":"favorable","evidence_level":"narrative_review","summary":"Promising endurance marker."},
+        {"gene_symbol":"HFE","variant_rsid":"rs1799945","allele":"G","category":"Endurance","direction":"favorable","evidence_level":"narrative_review","nutrition_interaction":"Iron","summary":"Promising endurance marker."},
+        {"gene_symbol":"MYBPC3","variant_rsid":"rs1052373","allele":"G","category":"Endurance","direction":"favorable","evidence_level":"narrative_review","summary":"Promising endurance marker."},
+        {"gene_symbol":"NFIA-AS2","variant_rsid":"rs1572312","allele":"C","category":"Endurance","direction":"favorable","evidence_level":"narrative_review","summary":"Promising endurance marker."},
+        {"gene_symbol":"PPARA","variant_rsid":"rs4253778","allele":"G","category":"Endurance","direction":"favorable","evidence_level":"narrative_review","summary":"Promising endurance marker."},
+        {"gene_symbol":"PPARGC1A","variant_rsid":"rs8192678","allele":"G","category":"Endurance","direction":"favorable","evidence_level":"narrative_review","summary":"Promising endurance marker."},
+        {"gene_symbol":"ACTN3","variant_rsid":"rs1815739","allele":"C","category":"Power","direction":"favorable","evidence_level":"narrative_review","summary":"Promising power marker; also listed for strength."},
+        {"gene_symbol":"AMPD1","variant_rsid":"rs17602729","allele":"C","category":"Power","direction":"favorable","evidence_level":"narrative_review","summary":"Promising power marker."},
+        {"gene_symbol":"CDKN1A","variant_rsid":"rs236448","allele":"C","category":"Power","direction":"favorable","evidence_level":"narrative_review","summary":"Promising power marker (A allele is the endurance one)."},
+        {"gene_symbol":"CPNE5","variant_rsid":"rs3213537","allele":"G","category":"Power","direction":"favorable","evidence_level":"narrative_review","summary":"Promising power marker."},
+        {"gene_symbol":"GALNTL6","variant_rsid":"rs558129","allele":"T","category":"Power","direction":"favorable","evidence_level":"narrative_review","summary":"Promising power marker."},
+        {"gene_symbol":"IGF2","variant_rsid":"rs680","allele":"G","category":"Power","direction":"favorable","evidence_level":"narrative_review","summary":"Promising power marker."},
+        {"gene_symbol":"IGSF3","variant_rsid":"rs699785","allele":"A","category":"Power","direction":"favorable","evidence_level":"narrative_review","summary":"Promising power marker."},
+        {"gene_symbol":"NOS3","variant_rsid":"rs2070744","allele":"T","category":"Power","direction":"favorable","evidence_level":"narrative_review","summary":"Promising power marker."},
+        {"gene_symbol":"TRHR","variant_rsid":"rs7832552","allele":"T","category":"Power","direction":"favorable","evidence_level":"narrative_review","summary":"Promising power marker."},
+        {"gene_symbol":"ACTN3","variant_rsid":"rs1815739","allele":"C","category":"Strength","direction":"favorable","evidence_level":"narrative_review","summary":"Promising strength marker."},
+        {"gene_symbol":"AR","variant_rsid":null,"variant_label":">=21 CAG repeats","category":"Strength","direction":"favorable","evidence_level":"narrative_review","summary":"Repeat polymorphism, no rsID."},
+        {"gene_symbol":"LRPPRC","variant_rsid":"rs10186876","allele":"A","category":"Strength","direction":"favorable","evidence_level":"narrative_review","summary":"Promising strength marker."},
+        {"gene_symbol":"MMS22L","variant_rsid":"rs9320823","allele":"T","category":"Strength","direction":"favorable","evidence_level":"narrative_review","summary":"Promising strength marker."},
+        {"gene_symbol":"PHACTR1","variant_rsid":"rs6905419","allele":"C","category":"Strength","direction":"favorable","evidence_level":"narrative_review","summary":"Promising strength marker."},
+        {"gene_symbol":"PPARG","variant_rsid":"rs1801282","allele":"G","category":"Strength","direction":"favorable","evidence_level":"narrative_review","summary":"Promising strength marker."}
+      ],
+      "caveat": "Abstract states elite performance cannot be predicted well from genetic testing alone."
+    },
+    {
+      "pmid": "27294501", "has_actionable_genomics": true,
+      "findings": [
+        {"gene_symbol":"ACTN3","variant_rsid":"rs1815739","variant_label":"R577X","category":"Recovery","direction":"mixed","evidence_level":"narrative_review","summary":"Associated with exercise-induced muscle damage severity/recovery time; genotype-specific direction not given in abstract."},
+        {"gene_symbol":"TNF","variant_rsid":"rs1800629","variant_label":"-308 G>A","category":"Recovery","direction":"mixed","evidence_level":"narrative_review","summary":"Linked to muscle damage response."},
+        {"gene_symbol":"IL6","variant_rsid":"rs1800795","variant_label":"-174 G>C","category":"Recovery","direction":"mixed","evidence_level":"narrative_review","summary":"Linked to muscle damage response."},
+        {"gene_symbol":"IGF2","variant_rsid":"rs680","variant_label":"ApaI","category":"Recovery","direction":"mixed","evidence_level":"narrative_review","summary":"Linked to muscle damage response."}
+      ],
+      "caveat": "Field described as 'in its infancy'."
+    },
+    {
+      "pmid": "12879365", "has_actionable_genomics": true,
+      "findings": [
+        {"gene_symbol":"ACTN3","variant_rsid":"rs1815739","variant_label":"R577X","allele":"577R","category":"Power","direction":"favorable","evidence_level":"case_control","population":"White (Australian) elite athletes","summary":"577R allele frequency higher in elite sprinters (both sexes) vs controls; in females, 577RX over-represented in sprinters and under-represented in endurance athletes; no such genotype effect in males."}
+      ]
+    },
+    {
+      "pmid": "35759151", "has_actionable_genomics": true,
+      "findings": [
+        {"gene_symbol":"UGT1A1","variant_rsid":"rs81753472","category":"Recovery","direction":"favorable","evidence_level":"case_control","population":"Czech elite athletes (n=536) vs general population (n=2594)","summary":"Gilbert syndrome prevalence 22% vs 9.6%; serum bilirubin 11.6 vs 9.6 umol/L; tendency to higher (TA)7 genotype frequencies. Authors suggest mild hyperbilirubinemia may predispose to better performance."}
+      ]
+    },
+    {
+      "pmid": "36289757", "has_actionable_genomics": true,
+      "findings": [
+        {"gene_symbol":"COL12A1","variant_rsid":"rs970547","allele":"T / TT","category":"Power","direction":"favorable","evidence_level":"case_control","population":"Lithuanian (293 athletes, 287 controls)","summary":"T allele/TT over-represented in athletes; C allele lower in sprint/power (16.9%) and footballers (19.4%) vs controls (33.3%). Variant is also described as a soft-tissue-injury marker."}
+      ],
+      "caveat": "Needs replication in other ethnic groups."
+    },
+    {
+      "pmid": "40141820", "has_actionable_genomics": true,
+      "findings": [
+        {"gene_symbol":"ACTN3","variant_rsid":"rs1815739","variant_label":"R/X","allele":"R","category":"Power","direction":"favorable","evidence_level":"case_control","population":"Egyptian adolescents (118 athletes, 110 controls)","summary":"R allele 77.5% vs 55.9%; RR genotype 61.9% vs 27.3% (p<0.001)."},
+        {"gene_symbol":"PPARA","variant_rsid":"rs4253778","variant_label":"G/C","allele":"C (as reported)","category":"Endurance","direction":"favorable","evidence_level":"case_control","population":"Egyptian adolescents","summary":"C allele 86.4% vs 14.1%; CC 80.5% vs 2.7%. See data_quality_flags: allele labeling looks questionable."}
+      ]
+    },
+    {
+      "pmid": "35080207", "has_actionable_genomics": true,
+      "findings": [
+        {"gene_symbol":"ACTN3","variant_rsid":"rs1815739","variant_label":"R577X","allele":"R / XX under-represented","category":"Power","direction":"favorable","evidence_level":"case_control","population":"Australian Football League players (n=47) vs 59 controls","summary":"XX genotype 4.3% vs 28.8% (p=0.003); R allele 70.2% vs 50%."},
+        {"gene_symbol":"ACE","variant_rsid":"rs4646994","variant_label":"I/D","category":"Power","direction":"null","evidence_level":"case_control","population":"AFL players","summary":"No significant difference vs controls."}
+      ]
+    },
+    {
+      "pmid": "38158179", "has_actionable_genomics": true,
+      "findings": [
+        {"gene_symbol":"CYP1A2","variant_rsid":"rs762551","allele":"A (AA)","category":"Nutrition","direction":"favorable","evidence_level":"meta_analysis","nutrition_interaction":"Caffeine","population":"12 studies, n=666","summary":"Acute caffeine improved cycling time trial only in A-allele carriers (WMD -0.90, 95% CI -1.48 to -0.33), not C-allele (WMD -0.08, p=0.53).","recommendation":"Abstract-supported only: genotype matters mainly for endurance cycling time trial."},
+        {"gene_symbol":"CYP1A2","variant_rsid":"rs762551","category":"Nutrition","direction":"null","evidence_level":"meta_analysis","nutrition_interaction":"Caffeine","summary":"Wingate and countermovement jump not improved by caffeine regardless of genotype."}
+      ]
+    },
+    {
+      "pmid": "28856171", "has_actionable_genomics": true,
+      "findings": [
+        {"gene_symbol":"COL5A1","variant_rsid":null,"category":"Injury_Risk","direction":"unfavorable","evidence_level":"systematic_review","summary":"Strongest evidence for tendon injury susceptibility (with TNC, MMP3, ESRRB); 26 studies, only level 3-4 evidence, homogeneous populations."},
+        {"gene_symbol":"TNC","variant_rsid":null,"category":"Injury_Risk","direction":"unfavorable","evidence_level":"systematic_review","summary":"Among strongest tendon-injury associations."},
+        {"gene_symbol":"MMP3","variant_rsid":null,"category":"Injury_Risk","direction":"unfavorable","evidence_level":"systematic_review","summary":"Among strongest tendon-injury associations."},
+        {"gene_symbol":"ESRRB","variant_rsid":null,"category":"Injury_Risk","direction":"unfavorable","evidence_level":"systematic_review","summary":"Among strongest tendon-injury associations."}
+      ]
+    },
+    {
+      "pmid": "25682119", "has_actionable_genomics": true,
+      "findings": [
+        {"gene_symbol":"ACE","variant_rsid":"rs4646994","variant_label":"I/D","allele":"I","category":"Endurance","direction":"favorable","evidence_level":"systematic_review","summary":"I allele associated with better high-altitude performance in 3 studies (strongest support of 13 polymorphisms)."},
+        {"gene_symbol":"AMPD1","variant_rsid":"rs17602729","variant_label":"C34T","category":"Endurance","direction":"mixed","evidence_level":"systematic_review","summary":"Associated with altitude performance in one study."},
+        {"gene_symbol":"ADRB2","variant_rsid":"rs1042713","variant_label":"Gly16Arg","category":"Endurance","direction":"mixed","evidence_level":"systematic_review","summary":"Associated with altitude performance in one study."},
+        {"gene_symbol":"AR","variant_rsid":null,"variant_label":"CAG repeat","category":"Endurance","direction":"mixed","evidence_level":"systematic_review","summary":"Associated with altitude performance in one study."}
+      ],
+      "caveat": "Only 11 studies; firm conclusions precluded."
+    },
+    {
+      "pmid": "26231489", "has_actionable_genomics": true,
+      "findings": [
+        {"gene_symbol":"ACE","variant_rsid":"rs4646994","allele":"I","category":"Endurance","direction":"favorable","evidence_level":"narrative_review","summary":"Positive in >=3 studies (endurance)."},
+        {"gene_symbol":"ACE","variant_rsid":"rs4646994","allele":"D","category":"Power","direction":"favorable","evidence_level":"narrative_review","summary":"Positive in >=3 studies (power/strength)."},
+        {"gene_symbol":"ACTN3","variant_rsid":"rs1815739","allele":"577X","category":"Endurance","direction":"favorable","evidence_level":"narrative_review","summary":"Positive in >=3 studies."},
+        {"gene_symbol":"ACTN3","variant_rsid":"rs1815739","allele":"Arg577","category":"Power","direction":"favorable","evidence_level":"narrative_review","summary":"Positive in >=3 studies."},
+        {"gene_symbol":"PPARA","variant_rsid":"rs4253778","allele":"G","category":"Endurance","direction":"favorable","evidence_level":"narrative_review","summary":"Positive in >=3 studies."},
+        {"gene_symbol":"PPARGC1A","variant_rsid":"rs8192678","variant_label":"Gly482","category":"Endurance","direction":"favorable","evidence_level":"narrative_review","summary":"Positive in >=3 studies."},
+        {"gene_symbol":"AMPD1","variant_rsid":"rs17602729","variant_label":"Gln12","category":"Power","direction":"favorable","evidence_level":"narrative_review","summary":"Positive in >=3 studies."},
+        {"gene_symbol":"HIF1A","variant_rsid":"rs11549465","variant_label":"582Ser","category":"Power","direction":"favorable","evidence_level":"narrative_review","summary":"Positive in >=3 studies."},
+        {"gene_symbol":"MTHFR","variant_rsid":"rs1801131","allele":"C","category":"Power","direction":"favorable","evidence_level":"narrative_review","summary":"Positive in >=3 studies."},
+        {"gene_symbol":"NOS3","variant_rsid":"rs2070744","allele":"T","category":"Power","direction":"favorable","evidence_level":"narrative_review","summary":"Positive in >=3 studies."},
+        {"gene_symbol":"PPARG","variant_rsid":"rs1801282","variant_label":"12Ala","category":"Power","direction":"favorable","evidence_level":"narrative_review","summary":"Positive in >=3 studies."},
+        {"gene_symbol":"CREM","variant_rsid":"rs1531550","allele":"A","category":"Power","direction":"favorable","evidence_level":"gwas","summary":"GWAS hit (African-American/Jamaican/Japanese/Russian athletes)."},
+        {"gene_symbol":"DMD","variant_rsid":"rs939787","allele":"T","category":"Power","direction":"favorable","evidence_level":"gwas","summary":"GWAS hit."},
+        {"gene_symbol":"GALNT13","variant_rsid":"rs10196189","allele":"G","category":"Power","direction":"favorable","evidence_level":"gwas","summary":"GWAS hit."},
+        {"gene_symbol":"NFIA-AS1","variant_rsid":"rs1572312","allele":"C","category":"Endurance","direction":"favorable","evidence_level":"gwas","summary":"GWAS hit."},
+        {"gene_symbol":"RBFOX1","variant_rsid":"rs7191721","allele":"G","category":"Endurance","direction":"favorable","evidence_level":"gwas","summary":"GWAS hit."},
+        {"gene_symbol":"TSHR","variant_rsid":"rs7144481","allele":"C","category":"Endurance","direction":"favorable","evidence_level":"gwas","summary":"GWAS hit."}
+      ],
+      "caveat": "29 (24%) of 120 markers failed replication in at least one study. Category of GWAS hits assigned by me as best fit; the abstract does not label them."
+    },
+    {
+      "pmid": "28790154", "has_actionable_genomics": true,
+      "findings": [
+        {"gene_symbol":"CKM","variant_rsid":"rs11559024","variant_label":"Glu83Gly","category":"Recovery","direction":"mixed","evidence_level":"meta_analysis","population":"GoDARTS + JUPITER (MAF ~0.02)","summary":"Carriers have 18% lower baseline CK and 24% lower CK variability; NOT associated with myalgia (OR 0.84, 95% CI 0.52-1.38).","recommendation":"Abstract-supported: not a reliable biomarker for muscle symptoms."}
+      ]
+    },
+    {
+      "pmid": "41143879", "has_actionable_genomics": true,
+      "findings": [
+        {"gene_symbol":"ACTN3","variant_rsid":"rs1815739","variant_label":"R577X","category":"Power","direction":"favorable","evidence_level":"narrative_review","summary":"Described as strong predictor of sprinting ability; linked to hypertrophy/explosive strength."},
+        {"gene_symbol":"ACE","variant_rsid":"rs4646994","category":"Power","direction":"mixed","evidence_level":"narrative_review","summary":"Named among power-related polymorphisms; no allele direction in abstract."},
+        {"gene_symbol":"AMPD1","variant_rsid":"rs17602729","category":"Power","direction":"mixed","evidence_level":"narrative_review","summary":"Named among power-related polymorphisms; no allele direction in abstract."}
+      ]
+    },
+    {
+      "pmid": "37895295", "has_actionable_genomics": true,
+      "findings": [
+        {"gene_symbol":"FAAH","variant_rsid":"rs324420","variant_label":"C385A","category":"Behavior","direction":"mixed","evidence_level":"narrative_review","summary":"Reported association with elite performance, stress coping, pain regulation; cumulative evidence inconsistent, needs validation in homogeneous sports."}
+      ]
+    },
+    {
+      "pmid": "40650118", "has_actionable_genomics": true,
+      "findings": [
+        {"gene_symbol":"COL5A1","variant_rsid":"rs13946","allele":"T / TT","category":"Injury_Risk","direction":"unfavorable","evidence_level":"meta_analysis","population":"7 studies, mainly Caucasian","summary":"TT/T associated with ACL injury under recessive model (OR 1.29, 95% CI 1.06-1.58, p=0.01); allele model OR 0.85 (p=0.04). C/- genotype protective in Caucasians."}
+      ]
+    },
+    {
+      "pmid": "33602343", "has_actionable_genomics": true,
+      "findings": [
+        {"gene_symbol":"ACTN3","variant_rsid":"rs1815739","variant_label":"R577X","category":"Power","direction":"favorable","evidence_level":"case_control","population":"Chinese elite female soccer players","summary":"XX genotype 0% in athletes vs 16% controls (genotype distribution differed; allele frequency did not)."},
+        {"gene_symbol":"ACE","variant_rsid":"rs4646994","variant_label":"I/D","category":"Endurance","direction":"null","evidence_level":"case_control","population":"Chinese elite female soccer players","summary":"No genotype/allele difference alone; ACE II/ID + ACTN3 RR/XR combination differed between athletes and controls (p<0.05) and ACE ID + ACTN3 RR linked to higher VO2max in defenders."}
+      ]
+    },
+    {
+      "pmid": "37588243", "has_actionable_genomics": true,
+      "findings": [
+        {"gene_symbol":"ANKK1","variant_rsid":"rs1800497","allele":"G/G","category":"Behavior","direction":"null","evidence_level":"case_control","population":"60 elite Turkish athletes + 20 controls","summary":"No significant difference in allele/genotype frequency for athletic performance; G/G associated with more sport experience (p<0.05). Small n."}
+      ]
+    },
+    {
+      "pmid": "33068677", "has_actionable_genomics": true,
+      "findings": [
+        {"gene_symbol":"ACE","variant_rsid":"rs4646994","variant_label":"I/D","category":"Endurance","direction":"null","evidence_level":"case_control","population":"51 elite swimmers vs 56 controls","summary":"No difference in ACE distribution between swimmers/controls or by event distance; no association with telomere length. Elite swimmers had shorter telomeres (p=0.006)."}
+      ]
+    },
+    {
+      "pmid": "36980932", "has_actionable_genomics": true,
+      "findings": [
+        {"gene_symbol":"SIRT1","variant_rsid":"rs41299232","allele":"G","category":"Endurance","direction":"favorable","evidence_level":"case_control","population":"Turkish + Russian replication","summary":"Over-represented in endurance vs sprint/power athletes (p=0.047 Turkish, 0.018 Russian); linked to higher VO2max and more slow-twitch fibers."},
+        {"gene_symbol":"NUP210","variant_rsid":"rs2280084","allele":"A","category":"Endurance","direction":"favorable","evidence_level":"case_control","summary":"Over-represented in endurance athletes (p=0.044 Turkish, 0.012 Russian)."},
+        {"gene_symbol":"TRPM2","variant_rsid":"rs1785440","allele":"G","category":"Endurance","direction":"favorable","evidence_level":"case_control","summary":"Over-represented in Turkish endurance athletes (p=0.034); higher VO2max (p=0.008). Not replicated for case-control in Russians per abstract."},
+        {"gene_symbol":"AGRN","variant_rsid":"rs4074992","allele":"C","category":"Power","direction":"favorable","evidence_level":"case_control","summary":"Over-represented in Turkish sprint/power athletes (p=0.037); larger fast-twitch fiber CSA (p=0.024)."}
+      ],
+      "caveat": "No SNP reached exome-wide significance (p<2.3e-7); nominal replication only."
+    },
+    {
+      "pmid": "32168870", "has_actionable_genomics": true,
+      "findings": [
+        {"gene_symbol":"ADORA2A","variant_rsid":"rs5751876","allele":"C (CC/CT)","category":"Nutrition","direction":"favorable","evidence_level":"rct","nutrition_interaction":"Caffeine","population":"20 resistance-trained men, all C carriers","summary":"Caffeine 3 mg/kg was ergogenic in 21 of 25 variables (effect size 0.14-0.96), similar to non-genotyped samples; C carriers are not true non-responders.","recommendation":"Abstract-supported: CT/CC carriers may still consider caffeine for acute performance gain."}
+      ]
+    },
+    {
+      "pmid": "24744483", "has_actionable_genomics": true,
+      "findings": [
+        {"gene_symbol":"HIF1A","variant_rsid":"rs11549465","variant_label":"Pro582Ser","allele":"Ser","category":"Power","direction":"favorable","evidence_level":"case_control","population":"Ukrainian (210 athletes, 326 controls)","summary":"Ser allele 16.1% vs 9.4% (p=0.034) in power athletes."},
+        {"gene_symbol":"NOS3","variant_rsid":"rs2070744","variant_label":"-786T/C","allele":"T","category":"Power","direction":"favorable","evidence_level":"case_control","summary":"T allele 78.3% vs 66.2% (p=0.0019) in power athletes."},
+        {"gene_symbol":"PPARG","variant_rsid":"rs1801282","variant_label":"Pro12Ala","allele":"Ala","category":"Power","direction":"favorable","evidence_level":"case_control","summary":"Ala allele higher in power vs endurance athletes (24.7% vs 13.5%, p=0.0076)."}
+      ]
+    },
+    {
+      "pmid": "30350114", "has_actionable_genomics": true,
+      "findings": [
+        {"gene_symbol":"COL5A1","variant_rsid":"rs12722","category":"Injury_Risk","direction":"favorable","evidence_level":"meta_analysis","population":"Caucasians, 8 articles / 11 studies","summary":"All effects OR<1.0 (reduced tendon-ligament injury risk); significant results (ORs 0.59-0.77); after outlier treatment ORs 0.32-0.78."},
+        {"gene_symbol":"COL5A1","variant_rsid":"rs13946","category":"Injury_Risk","direction":"favorable","evidence_level":"meta_analysis","population":"Caucasians","summary":"Significant after outlier treatment (ORs 0.32-0.78)."},
+        {"gene_symbol":"COL5A1","variant_rsid":"rs71746744","category":"Injury_Risk","direction":"favorable","evidence_level":"meta_analysis","summary":"Reduced risk (OR 0.26-0.65)."},
+        {"gene_symbol":"COL5A1","variant_rsid":"rs16399","category":"Injury_Risk","direction":"favorable","evidence_level":"meta_analysis","summary":"Reduced risk (OR 0.26-0.65)."}
+      ],
+      "caveat": "Heterogeneity was resolved only via outlier removal."
+    },
+    {
+      "pmid": "39514943", "has_actionable_genomics": true,
+      "findings": [
+        {"gene_symbol":"IGF1","variant_rsid":"rs35767","allele":"minor allele","category":"Strength","direction":"favorable","evidence_level":"meta_analysis","population":"3 studies","summary":"Minor allele more frequent in all athletes (OR 1.74, 1.26-2.40), endurance (OR 1.87) and power (OR 1.62); no difference power vs endurance; recessive model best fit."}
+      ],
+      "caveat": "Only 3 studies."
+    },
+    {
+      "pmid": "41009985", "has_actionable_genomics": true,
+      "findings": [
+        {"gene_symbol":"ACTN3","variant_rsid":"rs1815739","category":"Power","direction":"favorable","evidence_level":"meta_analysis","summary":"Pooled OR 1.40 (1.18-1.65); 1.32 after trim-and-fill. Endurance OR 1.35. Publication bias (Egger p=0.007); I2=72.3%."},
+        {"gene_symbol":"ACE","variant_rsid":"rs4646994","category":"Endurance","direction":"favorable","evidence_level":"meta_analysis","summary":"Endurance OR 1.22 (1.05-1.41), power OR 1.20 (1.03-1.43); no meaningful difference by sport type."}
+      ],
+      "caveat": "Authors call effects modest and advise conservative interpretation."
+    },
+    {
+      "pmid": "39519153", "has_actionable_genomics": true,
+      "findings": [
+        {"gene_symbol":"COMT","variant_rsid":"rs4680","variant_label":"Val158Met","category":"Behavior","direction":"favorable","evidence_level":"narrative_review","summary":"Linked to focus, stress resilience, conscientiousness (esp. martial arts)."},
+        {"gene_symbol":"BDNF","variant_rsid":"rs6265","variant_label":"Val66Met","category":"Behavior","direction":"favorable","evidence_level":"narrative_review","summary":"Linked to traits beneficial for performance."},
+        {"gene_symbol":"DRD3","variant_rsid":"rs167771","category":"Behavior","direction":"favorable","evidence_level":"narrative_review","summary":"Linked to higher agreeableness / teamwork (e.g., football)."}
+      ]
+    },
+    {
+      "pmid": "38760851", "has_actionable_genomics": true,
+      "findings": [
+        {"gene_symbol":"ACTN3","variant_rsid":"rs1815739","category":"Power","direction":"null","evidence_level":"meta_analysis","population":"107 studies, 54,382 subjects","summary":"No statistically significant association with athletic performance (endurance or power)."},
+        {"gene_symbol":"ACE","variant_rsid":"rs4646994","category":"Endurance","direction":"null","evidence_level":"meta_analysis","summary":"No statistically significant association."}
+      ],
+      "caveat": "Conflicts with 41009985 (which finds small significant ORs). Authors argue consumer genetic tests are unjustified."
+    },
+    {
+      "pmid": "34366884", "has_actionable_genomics": true,
+      "findings": [
+        {"gene_symbol":"IGF1R","variant_rsid":"rs1464430","variant_label":"275124 A>C","category":"Endurance","direction":"favorable","evidence_level":"systematic_review","summary":"Over-represented in endurance-trained athletes; C allele also linked to strength."},
+        {"gene_symbol":"PPARGC1A","variant_rsid":null,"category":"Endurance","direction":"favorable","evidence_level":"systematic_review","summary":"Genotypes correlated with endurance capacity tests."},
+        {"gene_symbol":"ACTN3","variant_rsid":"rs1815739","variant_label":"R577X","allele":"RR","category":"Strength","direction":"favorable","evidence_level":"systematic_review","summary":"RR linked to muscle strength."},
+        {"gene_symbol":"FTO","variant_rsid":"rs9939609","allele":"A / AA","category":"Strength","direction":"favorable","evidence_level":"systematic_review","summary":"Linked to muscle strength."},
+        {"gene_symbol":"MCT1","variant_rsid":"rs1049434","variant_label":"T1470A","category":"Strength","direction":"favorable","evidence_level":"systematic_review","summary":"Positively associated with strength athletes."},
+        {"gene_symbol":"ACVR1B","variant_rsid":"rs2854464","category":"Strength","direction":"favorable","evidence_level":"systematic_review","summary":"Positively associated with strength athletes."},
+        {"gene_symbol":"MMP","variant_rsid":"rs591058","category":"Injury_Risk","direction":"unfavorable","evidence_level":"systematic_review","summary":"MMP-group variant associated with injury susceptibility."},
+        {"gene_symbol":"MMP","variant_rsid":"rs679620","category":"Injury_Risk","direction":"unfavorable","evidence_level":"systematic_review","summary":"MMP-group variant associated with injury susceptibility."},
+        {"gene_symbol":"COL5A1","variant_rsid":"rs13946","category":"Injury_Risk","direction":"unfavorable","evidence_level":"systematic_review","summary":"Associated with injury susceptibility (direction not specified)."}
+      ],
+      "caveat": "19 studies, 2015-2019 only. MMP gene names not specified in abstract."
+    },
+    {
+      "pmid": "38036078", "has_actionable_genomics": true,
+      "findings": [
+        {"gene_symbol":"ADRB2","variant_rsid":"rs1042713","allele":"G / GG","category":"Endurance","direction":"favorable","evidence_level":"case_control","population":"Korean (150 elite, 116 college athletes, 145 controls)","summary":"GG OR 2.42 (1.38-4.24); G allele OR 1.58 (1.18-2.10); stronger in female elite athletes."}
+      ]
+    },
+    {
+      "pmid": "40869954", "has_actionable_genomics": true,
+      "findings": [
+        {"gene_symbol":"ATP2A3","variant_rsid":"rs6502758","category":"Power","direction":"favorable","evidence_level":"gwas","population":"Japanese, Turkish, Russian elite wrestlers (n=168)","summary":"Intronic; associated with elite wrestling in all 3 populations (meta p<0.0001); affects expression in skeletal muscle."},
+        {"gene_symbol":"UNC5C","variant_rsid":"rs265061","category":"Power","direction":"favorable","evidence_level":"gwas","summary":"Intronic; same cross-population association; affects muscle expression."}
+      ],
+      "caveat": "Effect alleles not stated in abstract; small cohorts."
+    },
+    {
+      "pmid": "28206959", "has_actionable_genomics": true,
+      "findings": [
+        {"gene_symbol":"COL1A1","variant_rsid":"rs1800012","allele":"T / TT","category":"Injury_Risk","direction":"favorable","evidence_level":"meta_analysis","population":"6 studies, 933 cases / 1,381 controls","summary":"TT vs GG OR 0.17 (0.08-0.35); recessive OR 0.21 (0.10-0.44); protective, esp. ACL injury."}
+      ],
+      "caveat": "Significant heterogeneity (PH=0.00), few studies."
+    },
+    {
+      "pmid": "33403509", "has_actionable_genomics": true,
+      "findings": [
+        {"gene_symbol":"CYP1A2","variant_rsid":"rs762551","allele":"AA","category":"Nutrition","direction":"mixed","evidence_level":"narrative_review","nutrition_interaction":"Caffeine","summary":"AA (fast metabolisers) most likely to benefit, but over half of studies show no genotype difference; some show C-allele advantage or disadvantage. Genetic testing before caffeine use currently unwarranted."}
+      ]
+    },
+    {
+      "pmid": "36168944", "has_actionable_genomics": true,
+      "findings": [
+        {"gene_symbol":"IL6R","variant_rsid":"rs2228145","category":"Recovery","direction":"mixed","evidence_level":"mechanistic","summary":"Raises soluble IL-6R, shifting balance to trans-signaling (pro-inflammatory); linked to RA, T1D, COVID-19 severity. Implications for exercise adaptation discussed, no direct performance effect size."}
+      ]
+    },
+    {
+      "pmid": "40656995", "has_actionable_genomics": true,
+      "findings": [
+        {"gene_symbol":"GALNT13","variant_rsid":"rs10196189","allele":"G","category":"Power","direction":"favorable","evidence_level":"gwas","population":"West African + East Asian elite sprint/power athletes; replicated in 2 European cohorts","summary":"P=2.13E-09 across three ancestry groups; GALNT13 expression positively associated with fast-twitch fiber area in vastus lateralis."}
+      ],
+      "caveat": "Other loci (BOP1, HSF1, STXBP2, GRM7, MPRIP, ZFYVE28, CERS4, ADAMTS18) only borderline/ancestry-specific and have no rsID in abstract."
+    },
+    {
+      "pmid": "39562229", "has_actionable_genomics": true,
+      "findings": [
+        {"gene_symbol":"CREB3L3","variant_rsid":null,"category":"Nutrition","direction":"unfavorable","evidence_level":"case_report","nutrition_interaction":"Dietary fat","summary":"Heterozygous variant in a pregnant woman with severe hypertriglyceridemia/pancreatitis; lipids improved postpartum with low-fat diet and routine exercise. Single case."}
+      ]
+    },
+    {
+      "pmid": "34718870", "has_actionable_genomics": true,
+      "findings": [
+        {"gene_symbol":"PNPLA3","variant_rsid":"rs738409","variant_label":"I148M (C>G)","category":"Metabolic","direction":"unfavorable","evidence_level":"narrative_review","nutrition_interaction":"Weight reduction (diet/exercise)","population":"Japanese NAFLD","summary":"Associated with NAFLD occurrence and progression; ~20% prevalence in Japanese (higher than Westerners); lean NAFLD also more common, so lifestyle advice may differ from Western."}
+      ]
+    },
+    {
+      "pmid": "38884061", "has_actionable_genomics": true,
+      "findings": [
+        {"gene_symbol":"Folate-metabolism genes (unspecified)","variant_rsid":null,"category":"Nutrition","direction":"favorable","evidence_level":"cohort","nutrition_interaction":"Folic acid","population":"350 metabolic-syndrome high-risk Chinese individuals; 226 genotyped","summary":"People with folic-acid-metabolism deficiency genes were more likely to normalize homocysteine with folate supplementation.","recommendation":"Abstract-supported: folate supplementation more effective for carriers of folate-metabolism deficiency variants."}
+      ],
+      "caveat": "Specific genes/variants not named in abstract."
+    },
+    {
+      "pmid": "34408664", "has_actionable_genomics": true,
+      "findings": [
+        {"gene_symbol":"CPT2","variant_rsid":null,"category":"Nutrition","direction":"unfavorable","evidence_level":"narrative_review","nutrition_interaction":"Dietary fat / carbohydrate","summary":"CPT II deficiency impairs long-chain fatty acid oxidation during endurance exercise; current advice is carbohydrate-rich, low-fat diet and limiting exercise; carnitine/MCT use controversial.","recommendation":"Abstract states current standard advice only; review proposes new theoretical approaches needing trials."}
+      ]
+    },
+    {
+      "pmid": "37715600", "has_actionable_genomics": true,
+      "findings": [
+        {"gene_symbol":"TM6SF2","variant_rsid":"rs58542926","allele":"CT","category":"Metabolic","direction":"favorable","evidence_level":"cohort","nutrition_interaction":"Diet + exercise program","population":"203 Japanese SLD patients, 6 months","summary":"CT carriers had larger triglyceride reduction than CC or TT."},
+        {"gene_symbol":"HSD17B13","variant_rsid":"rs6834314","allele":"AA","category":"Metabolic","direction":"favorable","evidence_level":"cohort","nutrition_interaction":"Diet + exercise program","summary":"AA had larger TG reduction than AG."},
+        {"gene_symbol":"PNPLA3","variant_rsid":"rs738409","category":"Metabolic","direction":"null","evidence_level":"cohort","nutrition_interaction":"Diet + exercise program","summary":"No genotype difference in treatment efficacy."}
+      ],
+      "caveat": "Retrospective; only TG showed genotype differences."
+    },
+    {
+      "pmid": "39599580", "has_actionable_genomics": true,
+      "findings": [
+        {"gene_symbol":"TMPRSS6","variant_rsid":null,"category":"Nutrition","direction":"unfavorable","evidence_level":"systematic_review","nutrition_interaction":"Iron","population":"Mostly Caucasian, 21 papers","summary":"Strongest correlation with iron parameters among identified SNPs; risk variants suggest possible benefit from iron supplementation."},
+        {"gene_symbol":"HFE","variant_rsid":"rs1800562","category":"Nutrition","direction":"favorable","evidence_level":"systematic_review","nutrition_interaction":"Iron","summary":"Protective against iron deficiency."},
+        {"gene_symbol":"HFE","variant_rsid":"rs1799945","category":"Nutrition","direction":"favorable","evidence_level":"systematic_review","nutrition_interaction":"Iron","summary":"Protective against iron deficiency."},
+        {"gene_symbol":"TF","variant_rsid":"rs1799852","category":"Nutrition","direction":"favorable","evidence_level":"systematic_review","nutrition_interaction":"Iron","summary":"Protective against iron deficiency."}
+      ],
+      "caveat": "Other 11 risk SNPs not named in abstract."
+    }
+  ],
+  "no_variant_level_data_pmids": [
+    "39796530","33668219","41367227","33420603","41227002","31235964","16572366","39683475","35428907","35203507","39453231","23329609","33925504","39421430","34203902","18384287","32558587","38396362","39757126","33345139","24809029","21540342","26757801","41245977","25012736","31691930","32943784","36421766","39336807","38814202","35629331","41604578","22830451","34395467","38892371","28416894","24744482","27428007","27287077","40230536","41859758","34828287","27736250","37754829","26288575","29561306","19967710","42051621","17680029","40559682","28129729","42623242","41300761","31551799","42761794","10590411","40879950","40757534","10899450","35173374","31924536","35362801","39482721","37993877","31779250","21513146","27900193","33388079",
+    "29540367","36479502","34836334","30982733","38958868","37722778","39591800","29589768","31482093","15076798","37499866","37832608","34204586","39796095","21916794","29280410","40164953","31267859","38068803","28674982","39429231","38194216","31555656","35595508","39389946","39962541","34907754","38531477","37761807","32849773","39769203","15212755","38455434","32517297","30544511","31866123","24913896","37462522","28332171","25465031","37086262","24373813","38124554","15930480","29043603","22397027","32797342","29135687","10343355","35390609","31472367","36011409","36839316","18710364","18349529","17510669","38608276","31096708","41156462","33183532","17269708","40683252","17505120","18296321","41123767","39561029","37583297","32905708","19215321","25052691","25601968","32183926","40704204","40999316","41515177","40278399","34342164","18923559","41486615","25511531","39279751","31527314","40561562","27250737"
+  ]
+}

@@ -1,0 +1,10 @@
+biopython
+pydantic
+google-genai
+python-dotenv
+flask-sqlalchemy
+flask
+pymysql
+requests
+pypdf
+langchain_openai

@@ -1,0 +1,13 @@
+.git
+.gitignore
+.env
+.env.*
+env/
+.env/
+__pycache__/
+*.pyc
+.idea/
+.vscode/
+static/uploads/*
+instance/*
+*.snapshot
