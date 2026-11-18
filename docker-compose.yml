@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   # ── 1. قاعدة بيانات MySQL 8.0 ──────────────────────────────────────────────
   db:
@@ -7,15 +5,13 @@ services:
     container_name: sports-genomics-db
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: ${DB_PASS:-rootpassword}
-      MYSQL_DATABASE: ${DB_NAME:-sports_genomics_db}
-      MYSQL_USER: ${DB_USER:-sports_user}
-      MYSQL_PASSWORD: ${DB_PASS:-sports_pass123}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASS}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASS}
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     volumes:
       - mysqldata:/var/lib/mysql
-    ports:
-      - "3307:3306" # متاح محلياً على البورت 3307 لتجنب التعارض مع MySQL المحلي
     healthcheck:
       test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -p$${MYSQL_ROOT_PASSWORD}"]
       interval: 5s
@@ -30,19 +26,18 @@ services:
     container_name: sports-genomics-web
     restart: always
     ports:
-      - "1904:4500"
+      - "127.0.0.1:1904:4500"
     environment:
-      - DB_USER=${DB_USER:-sports_user}
-      - DB_PASS=${DB_PASS:-sports_pass123}
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
       - DB_HOST=db
-      - DB_NAME=${DB_NAME:-sports_genomics_db}
-      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
-      - OPENAI_MODEL=${OPENAI_MODEL:-google/gemini-2.5-flash}
-      - SECRET_KEY=${SECRET_KEY:-sports-genomics-production-secret}
+      - DB_NAME=${DB_NAME}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPENAI_MODEL=${OPENAI_MODEL}
+      - SECRET_KEY=${SECRET_KEY}
     volumes:
       - ./logs:/app/logs
       - ./templates:/app/templates:ro # تعديل الـ UI ينعكس فوراً بدون Rebuild
-      - ./curated_genomics_data.json:/app/curated_genomics_data.json:ro
     depends_on:
       db:
         condition: service_healthy

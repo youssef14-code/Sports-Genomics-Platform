@@ -25,3 +25,7 @@ class Config:
     
     # Gemini API Key
     GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
+
+    # OpenAI API Key
+    OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
+    OPENAI_MODEL = os.environ.get("OPENAI_MODEL", "gpt-5.6-luna")

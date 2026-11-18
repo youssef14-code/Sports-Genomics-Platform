@@ -1,4 +1,3 @@
-<!-- templates/index.html -->
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -7,11 +6,13 @@
     <title>Precision Sports Genomics | مؤشر الجاهزية الإكلينيكية</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    
+
     <style>
         :root {
             --bg-base: #0a0f1d;
             --bg-card: #131b2e;
+            --bg-soft: rgba(12, 19, 34, 0.7);
+            --bg-input: #0c1322;
             --border-color: #243049;
             --primary: #0284c7;
             --accent-cyan: #38bdf8;
@@ -20,74 +21,229 @@
             --accent-amber: #f59e0b;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
+            --text-soft: #cbd5e1;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; }
         body { background: var(--bg-base); color: var(--text-main); min-height: 100vh; padding: 2rem 1rem; }
         .app-container { max-width: 1050px; margin: 0 auto; }
 
-        .header { text-align: center; margin-bottom: 2rem; }
+        .header { text-align: center; margin-bottom: 1.5rem; }
         .badge-tag { display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.3); color: var(--accent-cyan); padding: 0.35rem 1rem; border-radius: 9999px; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.75rem; }
-        .header h1 { font-size: 2.2rem; font-weight: 900; color: #fff; }
+        .header h1 { font-size: 2.2rem; font-weight: 900; color: #fff; line-height: 1.4; }
         .header p { color: var(--text-muted); font-size: 1rem; margin-top: 0.25rem; }
 
-        .glass-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 20px; box-shadow: 0 20px 40px -15px rgba(0,0,0,0.5); padding: 2rem; margin-bottom: 2rem; }
+        .glass-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 20px; box-shadow: 0 20px 40px -15px rgba(0,0,0,0.5); padding: 2rem; margin-bottom: 2rem; position: relative; }
 
-        /* Form Grid */
-        .section-title { font-size: 1.15rem; font-weight: 800; color: var(--accent-cyan); margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.5rem; }
-        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; margin-bottom: 1.75rem; }
-        .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
-        .form-group label { font-size: 0.88rem; font-weight: 700; color: var(--text-muted); }
-        .form-control { background: #0c1322; border: 1px solid var(--border-color); border-radius: 10px; padding: 0.75rem 1rem; color: #fff; font-size: 0.95rem; outline: none; transition: 0.2s; }
-        .form-control:focus { border-color: var(--accent-cyan); box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2); }
+        /* ---------- Stepper + progress ---------- */
+        .stepper-wrap { margin-bottom: 1.5rem; }
+        .stepper { display: flex; justify-content: space-between; gap: 0.5rem; margin-bottom: 0.9rem; }
+        .step-item { flex: 1; display: flex; align-items: center; justify-content: center; gap: 0.6rem; color: var(--text-muted); font-weight: 700; font-size: 0.95rem; padding: 0.5rem; border-radius: 12px; cursor: default; user-select: none; }
+        .step-item.reachable { cursor: pointer; }
+        .step-item.reachable:hover { background: rgba(56, 189, 248, 0.06); }
+        .step-dot { width: 34px; height: 34px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; background: var(--bg-input); border: 2px solid var(--border-color); font-family: 'JetBrains Mono', monospace; font-weight: 800; flex-shrink: 0; transition: 0.3s; }
+        .step-item.active { color: #fff; }
+        .step-item.active .step-dot { border-color: var(--accent-cyan); background: rgba(56, 189, 248, 0.15); color: var(--accent-cyan); box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.12); }
+        .step-item.done { color: var(--accent-emerald); }
+        .step-item.done .step-dot { border-color: var(--accent-emerald); background: rgba(16, 185, 129, 0.15); color: var(--accent-emerald); }
+        .progress-track { height: 6px; background: var(--border-color); border-radius: 9999px; overflow: hidden; }
+        .progress-fill { height: 100%; width: 33.3%; background: linear-gradient(90deg, var(--accent-cyan), var(--primary)); border-radius: 9999px; transition: width 0.45s ease; }
+        .progress-text { text-align: center; color: var(--text-muted); font-size: 0.8rem; margin-top: 0.4rem; }
 
-        /* Upload Zone */
-        .upload-zone { border: 2px dashed #334155; border-radius: 14px; padding: 2.5rem 1.5rem; text-align: center; cursor: pointer; transition: 0.2s; background: rgba(12, 19, 34, 0.4); }
-        .upload-zone:hover, .upload-zone.dragover { border-color: var(--accent-cyan); background: rgba(56, 189, 248, 0.04); }
-        .upload-icon { font-size: 3rem; color: var(--accent-cyan); margin-bottom: 1rem; }
-        .selected-file-badge { display: none; margin-top: 1rem; background: rgba(16, 185, 129, 0.15); border: 1px solid var(--accent-emerald); color: var(--accent-emerald); padding: 0.4rem 1rem; border-radius: 8px; font-weight: 700; width: fit-content; margin-right: auto; margin-left: auto; }
-
-        /* Button */
-        .btn-analyze { width: 100%; background: linear-gradient(135deg, #0284c7, #0369a1); color: #fff; border: none; padding: 1.15rem; font-size: 1.15rem; font-weight: 800; border-radius: 12px; cursor: pointer; margin-top: 1.5rem; display: flex; align-items: center; justify-content: center; gap: 0.75rem; box-shadow: 0 10px 20px rgba(2, 132, 199, 0.3); transition: 0.2s; }
-        .btn-analyze:hover { background: linear-gradient(135deg, #0369a1, #075985); }
-        .btn-analyze:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; }
-        .spinner { display: none; width: 22px; height: 22px; border: 3px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.8s linear infinite; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-
-        /* Results */
-        #results-container { display: none; animation: fadeIn 0.4s ease-out; }
+        .step-panel { display: none; }
+        .step-panel.active { display: block; animation: fadeIn 0.35s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .athlete-banner { background: linear-gradient(135deg, #1e293b, #0f172a); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.5rem; margin-bottom: 1.75rem; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1.5rem; }
-        .athlete-info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; flex: 1; }
-        .info-label { font-size: 0.8rem; color: var(--text-muted); font-weight: 600; }
-        .info-value { font-size: 1.05rem; font-weight: 800; color: #fff; }
+        /* ---------- Form ---------- */
+        .section-title { font-size: 1.15rem; font-weight: 800; color: var(--accent-cyan); margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.5rem; }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.25rem; margin-bottom: 1.75rem; }
+        .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+        .form-group label { font-size: 0.88rem; font-weight: 700; color: var(--text-muted); }
+        .form-group label .opt { font-weight: 500; opacity: 0.7; font-size: 0.78rem; }
+        .input-wrap { position: relative; }
+        .input-wrap > i { position: absolute; inset-inline-start: 1rem; top: 50%; transform: translateY(-50%); color: #64748b; font-size: 0.95rem; pointer-events: none; transition: 0.2s; }
+        .form-control { width: 100%; height: 48px; background: var(--bg-input); border: 1px solid var(--border-color); border-radius: 10px; padding: 0 1rem; padding-inline-start: 2.7rem; color: #fff; font-size: 0.95rem; outline: none; transition: 0.2s; }
+        .form-control::placeholder { color: #64748b; opacity: 1; }
+        .form-control:focus { border-color: var(--accent-cyan); box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2); }
+        .input-wrap:focus-within > i { color: var(--accent-cyan); }
+        .form-group.invalid .form-control { border-color: var(--accent-rose); box-shadow: 0 0 0 2px rgba(244, 63, 94, 0.15); }
+        .field-error { display: none; color: var(--accent-rose); font-size: 0.8rem; font-weight: 600; }
+        .form-group.invalid .field-error { display: block; }
+        .full-row { grid-column: 1 / -1; }
 
-        .iri-badge { background: rgba(244, 63, 94, 0.15); border: 1px solid var(--accent-rose); border-radius: 14px; padding: 1rem 1.5rem; text-align: center; min-width: 170px; }
-        .iri-title { font-size: 0.8rem; color: var(--accent-rose); font-weight: 700; }
-        .iri-score { font-size: 1.8rem; font-weight: 900; color: #fff; font-family: 'JetBrains Mono', monospace; }
+        /* ---------- Buttons ---------- */
+        .btn-row { display: flex; gap: 0.75rem; margin-top: 1.5rem; flex-wrap: wrap; }
+        .btn-primary { flex: 1; min-height: 56px; background: linear-gradient(135deg, #0284c7, #0369a1); color: #fff; border: none; padding: 1rem 1.5rem; font-size: 1.15rem; font-weight: 800; border-radius: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.75rem; box-shadow: 0 10px 20px rgba(2, 132, 199, 0.3); transition: 0.2s; }
+        .btn-primary:hover { background: linear-gradient(135deg, #0369a1, #075985); }
+        .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; }
+        .btn-primary.big { min-height: 66px; font-size: 1.3rem; flex: 2; }
+        .btn-secondary { background: #334155; color: #fff; border: none; padding: 0.8rem 1.5rem; min-height: 48px; border-radius: 10px; cursor: pointer; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; font-size: 0.95rem; transition: 0.2s; }
+        .btn-secondary:hover { background: #475569; }
 
-        .tracks-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
-        .track-card { background: rgba(12, 19, 34, 0.7); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.75rem; position: relative; overflow: hidden; }
+        /* ---------- Upload ---------- */
+        .upload-zone { border: 2px dashed #334155; border-radius: 16px; padding: 4.5rem 1.5rem; text-align: center; cursor: pointer; transition: 0.2s; background: rgba(12, 19, 34, 0.4); display: block; }
+        .upload-zone:hover, .upload-zone.dragover { border-color: var(--accent-cyan); background: rgba(56, 189, 248, 0.05); }
+        .upload-zone.dragover { transform: scale(1.01); }
+        .upload-icon { font-size: 3.8rem; color: var(--accent-cyan); margin-bottom: 1rem; }
+        .upload-zone h3 { font-size: 1.25rem; margin-bottom: 0.35rem; }
+        .upload-zone p { color: var(--text-muted); font-size: 0.9rem; }
+
+        .file-card { display: none; align-items: center; gap: 1rem; margin-top: 1rem; background: rgba(16, 185, 129, 0.1); border: 1px solid var(--accent-emerald); border-radius: 12px; padding: 0.85rem 1.1rem; }
+        .file-card.show { display: flex; }
+        .file-card > i.fi { font-size: 1.8rem; color: var(--accent-emerald); }
+        .file-meta { flex: 1; min-width: 0; }
+        .file-meta .n { font-weight: 800; color: #fff; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; direction: ltr; text-align: right; }
+        .file-meta .s { font-size: 0.82rem; color: var(--text-muted); }
+        .file-remove { background: transparent; border: 1px solid #475569; color: var(--text-soft); width: 38px; height: 38px; border-radius: 10px; cursor: pointer; transition: 0.2s; }
+        .file-remove:hover { border-color: var(--accent-rose); color: var(--accent-rose); }
+
+        .inline-error { display: none; align-items: flex-start; gap: 0.7rem; margin-top: 1rem; background: rgba(244, 63, 94, 0.1); border: 1px solid rgba(244, 63, 94, 0.5); color: #fecdd3; padding: 0.85rem 1.1rem; border-radius: 12px; font-weight: 600; font-size: 0.93rem; line-height: 1.7; }
+        .inline-error.show { display: flex; }
+        .inline-error i { color: var(--accent-rose); margin-top: 0.3rem; }
+
+        /* ---------- Loading overlay ---------- */
+        .loading-overlay { display: none; position: absolute; inset: 0; background: rgba(10, 15, 29, 0.92); border-radius: 20px; z-index: 5; flex-direction: column; align-items: center; justify-content: center; gap: 1.1rem; padding: 2rem; text-align: center; }
+        .loading-overlay.show { display: flex; }
+        .spinner { width: 54px; height: 54px; border: 5px solid rgba(255,255,255,0.12); border-top-color: var(--accent-cyan); border-radius: 50%; animation: spin 0.9s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .loading-msg { font-weight: 800; font-size: 1.1rem; min-height: 1.8rem; }
+        .indeterminate { width: min(320px, 80%); height: 6px; background: var(--border-color); border-radius: 9999px; overflow: hidden; position: relative; }
+        .indeterminate::after { content: ''; position: absolute; top: 0; height: 100%; width: 40%; background: linear-gradient(90deg, var(--accent-cyan), var(--primary)); border-radius: 9999px; animation: slide 1.4s ease-in-out infinite; }
+        @keyframes slide { 0% { inset-inline-start: -40%; } 100% { inset-inline-start: 100%; } }
+        .loading-sub { color: var(--text-muted); font-size: 0.85rem; }
+
+        /* ---------- Report ---------- */
+        .back-bar { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 1.25rem; }
+        .report-head { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.25rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-color); }
+        .report-head h2 { font-size: 1.5rem; font-weight: 900; }
+        .report-head .sub { color: var(--text-muted); font-size: 0.88rem; }
+
+        .athlete-banner { background: linear-gradient(135deg, #1e293b, #0f172a); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.5rem; margin-bottom: 1.5rem; }
+        .athlete-info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 1rem; }
+        .info-label { font-size: 0.8rem; color: var(--text-muted); font-weight: 600; display: block; }
+        .info-value { font-size: 1.05rem; font-weight: 800; color: #fff; word-break: break-word; }
+
+        .invalid-notice { display: none; align-items: flex-start; gap: 0.9rem; background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.5); border-radius: 14px; padding: 1.1rem 1.4rem; margin-bottom: 1.5rem; }
+        .invalid-notice i { color: var(--accent-amber); font-size: 1.5rem; margin-top: 0.15rem; }
+        .invalid-notice .t { font-weight: 800; color: var(--accent-amber); margin-bottom: 0.2rem; }
+        .invalid-notice .m { color: #e2e8f0; font-size: 0.95rem; line-height: 1.7; }
+
+        /* Tabs */
+        .tabs { display: flex; gap: 0.5rem; overflow-x: auto; padding-bottom: 0.4rem; margin-bottom: 1.25rem; scrollbar-width: thin; }
+        .tab-btn { flex: 1 0 auto; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; background: var(--bg-input); color: var(--text-muted); border: 1px solid var(--border-color); padding: 0.75rem 1.1rem; min-height: 46px; border-radius: 12px; font-weight: 700; font-size: 0.95rem; cursor: pointer; white-space: nowrap; transition: 0.2s; }
+        .tab-btn:hover { color: #fff; border-color: #334155; }
+        .tab-btn.active { background: rgba(56, 189, 248, 0.12); border-color: var(--accent-cyan); color: var(--accent-cyan); }
+        .tab-panel { display: none; }
+        .tab-panel.active { display: block; animation: fadeIn 0.3s ease-out; }
+
+        /* Summary cards + visuals */
+        .summary-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+        .sum-card { background: var(--bg-soft); border: 1px solid var(--border-color); border-radius: 14px; padding: 1.1rem 1.2rem; display: flex; gap: 0.9rem; align-items: center; }
+        .sum-card .ic { width: 46px; height: 46px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
+        .sum-card .lb { font-size: 0.78rem; color: var(--text-muted); font-weight: 600; }
+        .sum-card .vl { font-size: 1.15rem; font-weight: 900; color: #fff; line-height: 1.4; }
+        .sum-card .sb { font-size: 0.78rem; color: var(--text-muted); }
+
+        .visual-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
+        .vis-card { background: var(--bg-soft); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.5rem; text-align: center; }
+        .vis-title { font-weight: 800; font-size: 1.05rem; margin-bottom: 0.75rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
+        .vis-card svg { width: 100%; max-width: 400px; height: auto; display: block; margin: 0 auto; }
+        .vis-msg { color: var(--text-muted); font-size: 0.9rem; padding: 2rem 0.5rem; line-height: 1.8; }
+        .gauge-val { font-family: 'JetBrains Mono', monospace; font-size: 2.4rem; font-weight: 800; line-height: 1.1; }
+        .gauge-lvl { font-weight: 800; margin-top: 0.2rem; }
+        .gauge-legend { display: flex; justify-content: center; gap: 1rem; margin-top: 0.8rem; font-size: 0.78rem; color: var(--text-muted); flex-wrap: wrap; }
+        .gauge-legend span::before { content: ''; display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-inline-end: 0.35rem; background: var(--c); }
+        #gauge-needle { transition: transform 1s cubic-bezier(.2,.8,.2,1); }
+        .svg-label { fill: var(--text-soft); font-size: 13px; font-weight: 700; }
+        .svg-val { fill: var(--accent-cyan); font-size: 12px; font-weight: 800; font-family: 'JetBrains Mono', monospace; }
+        .svg-grid { fill: none; stroke: #334155; stroke-width: 1; }
+
+        /* Body map */
+        .body-map-card { background: var(--bg-soft); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.75rem; }
+        .body-map-title { display: flex; align-items: center; gap: 0.75rem; font-size: 1.2rem; font-weight: 800; margin-bottom: 1rem; }
+        .body-map-title i { color: var(--accent-rose); }
+        .body-views { display: flex; justify-content: center; gap: 2.5rem; flex-wrap: wrap; }
+        .body-view { text-align: center; }
+        .body-view .cap { color: var(--text-muted); font-size: 0.85rem; font-weight: 700; margin-bottom: 0.25rem; }
+        .body-view svg { width: 190px; height: auto; }
+        .part { fill: #1b2740; stroke: #334155; stroke-width: 1.5; transition: 0.2s; }
+        .part:hover { fill: #26365a; }
+        .part.hit-high { fill: rgba(244, 63, 94, 0.55); stroke: var(--accent-rose); stroke-width: 2.5; animation: pulse 1.6s ease-in-out infinite; filter: drop-shadow(0 0 6px rgba(244,63,94,0.8)); }
+        .part.hit-med { fill: rgba(245, 158, 11, 0.5); stroke: var(--accent-amber); stroke-width: 2.5; filter: drop-shadow(0 0 5px rgba(245,158,11,0.6)); }
+        .part.hit-low { fill: rgba(56, 189, 248, 0.4); stroke: var(--accent-cyan); stroke-width: 2; }
+        @keyframes pulse { 0%,100% { fill: rgba(244, 63, 94, 0.35); } 50% { fill: rgba(244, 63, 94, 0.8); } }
+        .injury-legend { display: flex; flex-wrap: wrap; gap: 0.6rem; justify-content: center; margin-top: 1rem; }
+        .chip { background: rgba(244, 63, 94, 0.12); border: 1px solid var(--accent-rose); color: #fecdd3; padding: 0.3rem 0.9rem; border-radius: 9999px; font-size: 0.85rem; font-weight: 700; }
+        .chip.med { background: rgba(245, 158, 11, 0.12); border-color: var(--accent-amber); color: #fde68a; }
+        .chip.low { background: rgba(56, 189, 248, 0.12); border-color: var(--accent-cyan); color: #bae6fd; }
+        .no-injury { color: var(--text-muted); font-size: 0.9rem; text-align: center; margin-top: 1rem; }
+
+        /* Track cards */
+        .track-card { background: var(--bg-soft); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.75rem; position: relative; overflow: hidden; }
         .track-card::before { content: ''; position: absolute; top: 0; right: 0; width: 4px; height: 100%; background: var(--accent-cyan); }
         .track-card.risk::before { background: var(--accent-rose); }
         .track-card.nutrition::before { background: var(--accent-emerald); }
         .track-card.workload::before { background: var(--accent-amber); }
-
         .track-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.25rem; font-size: 1.2rem; font-weight: 800; color: #fff; }
         .track-header i { font-size: 1.3rem; color: var(--accent-cyan); }
         .track-card.risk .track-header i { color: var(--accent-rose); }
         .track-card.nutrition .track-header i { color: var(--accent-emerald); }
         .track-card.workload .track-header i { color: var(--accent-amber); }
-        .track-content { font-size: 0.98rem; line-height: 1.85; color: #cbd5e1; white-space: pre-line; }
+        .track-content { font-size: 0.98rem; line-height: 1.85; color: var(--text-soft); white-space: pre-line; }
 
-        .actions-footer { display: flex; gap: 1rem; margin-top: 2rem; justify-content: flex-end; }
-        .btn-secondary { background: #334155; color: #fff; border: none; padding: 0.8rem 1.5rem; border-radius: 10px; cursor: pointer; font-weight: 700; display: inline-flex; align-items: center; gap: 0.5rem; }
-        .btn-secondary:hover { background: #475569; }
+        .disclaimer { display: flex; gap: 0.8rem; align-items: flex-start; margin-top: 1.75rem; padding: 1rem 1.2rem; border-radius: 12px; background: rgba(148, 163, 184, 0.08); border: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.85rem; line-height: 1.8; }
+        .disclaimer i { color: var(--accent-cyan); margin-top: 0.3rem; }
 
+        .actions-footer { display: flex; gap: 0.75rem; margin-top: 1.5rem; justify-content: flex-end; flex-wrap: wrap; }
+
+        .toast { position: fixed; bottom: 1.5rem; inset-inline: 1rem; margin: 0 auto; width: fit-content; max-width: 92vw; background: #1e293b; border: 1px solid var(--accent-cyan); color: #fff; padding: 0.8rem 1.3rem; border-radius: 12px; font-weight: 700; font-size: 0.92rem; box-shadow: 0 10px 30px rgba(0,0,0,0.5); opacity: 0; pointer-events: none; transform: translateY(10px); transition: 0.3s; z-index: 50; }
+        .toast.show { opacity: 1; transform: translateY(0); }
+
+        /* ---------- Mobile ---------- */
         @media (max-width: 768px) {
-            .header h1 { font-size: 1.75rem; }
-            .athlete-banner { flex-direction: column; align-items: stretch; }
+            body { padding: 1rem 0.75rem; }
+            .header h1 { font-size: 1.55rem; }
+            .glass-card { padding: 1.25rem; border-radius: 16px; }
+            .step-label { display: none; }
+            .step-item.active .step-label { display: inline; }
+            .step-item { padding: 0.25rem; }
+            .visual-grid { grid-template-columns: 1fr; }
+            .upload-zone { padding: 2.75rem 1rem; }
+            .upload-icon { font-size: 3rem; }
+            .btn-row, .back-bar, .actions-footer { flex-direction: column; }
+            .btn-row .btn-primary, .btn-row .btn-secondary, .back-bar .btn-secondary, .actions-footer .btn-secondary { width: 100%; flex: none; }
+            .btn-primary.big { min-height: 62px; font-size: 1.2rem; }
+            .track-card, .body-map-card, .vis-card { padding: 1.1rem; }
+            .body-views { gap: 1rem; }
+            .body-view svg { width: 140px; }
+            .report-head h2 { font-size: 1.25rem; }
+        }
+
+        /* ---------- Print (clean, light) ---------- */
+        @media print {
+            :root { --bg-base: #fff; --bg-card: #fff; --bg-soft: #fff; --bg-input: #fff; --border-color: #cbd5e1; --text-main: #0f172a; --text-muted: #475569; --text-soft: #1e293b; --accent-cyan: #0369a1; }
+            * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            body { padding: 0; background: #fff; color: #0f172a; }
+            .header, .stepper-wrap, .tabs, .actions-footer, .back-bar, .toast, .loading-overlay, .step-panel:not(.active), .step-panel:not(#step-3) { display: none !important; }
+            #step-3 { display: block !important; box-shadow: none; border: none; padding: 0; }
+            .glass-card { box-shadow: none; }
+            .tab-panel, .tab-panel.active, .step-panel.active { animation: none !important; opacity: 1 !important; transform: none !important; }
+            .tab-panel { display: block !important; margin-bottom: 1.2rem; break-inside: avoid; }
+            #gauge-needle line { stroke: #0f172a; }
+            #gauge-svg circle { stroke: #0f172a; }
+            .chip, .chip.med, .chip.low { color: #0f172a; }
+            .svg-label { fill: #1e293b; }
+            .athlete-banner { background: #f1f5f9; }
+            .info-value, .track-header, .sum-card .vl, .report-head h2 { color: #0f172a; }
+            .part { fill: #e2e8f0; stroke: #94a3b8; animation: none; filter: none; }
+            .part.hit-high { fill: #fb7185; stroke: #e11d48; }
+            .part.hit-med { fill: #fbbf24; stroke: #d97706; }
+            .part.hit-low { fill: #7dd3fc; stroke: #0284c7; }
+            .chip { color: #0f172a; }
+            .svg-grid { stroke: #94a3b8; }
+            .svg-val { fill: #0369a1; }
+            #gauge-needle { transition: none; }
+            .disclaimer { background: #f8fafc; }
         }
     </style>
 </head>
@@ -99,235 +255,919 @@
             <p>تحليل التوافق الجيني، مؤشر الإصابات، وبروتوكولات التغذية والأحمال الميدانية</p>
         </header>
 
-        <!-- Intake Form & Upload Card -->
-        <div class="glass-card">
+        <!-- Stepper + progress bar -->
+        <div class="stepper-wrap" id="stepper">
+            <div class="stepper">
+                <div class="step-item active" data-step="1"><span class="step-dot">1</span><span class="step-label">بيانات الرياضي</span></div>
+                <div class="step-item" data-step="2"><span class="step-dot">2</span><span class="step-label">رفع ملف التحليل</span></div>
+                <div class="step-item" data-step="3"><span class="step-dot">3</span><span class="step-label">عرض التقرير</span></div>
+            </div>
+            <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+            <div class="progress-text" id="progress-text">الخطوة 1 من 3</div>
+        </div>
+
+        <!-- ================= Step 1: athlete data ================= -->
+        <section class="glass-card step-panel active" id="step-1">
             <div class="section-title"><i class="fa-solid fa-user-pen"></i> البيانات الفسيولوجية والأنثروبومترية للرياضي</div>
-            
+
             <div class="form-grid">
                 <div class="form-group">
-                    <label>اسم الرياضي</label>
-                    <input type="text" id="athlete-name" class="form-control" placeholder="كابتن / أحمد خالد" value="كابتن/ أحمد خالد">
+                    <label for="athlete-name">اسم الرياضي</label>
+                    <div class="input-wrap"><i class="fa-solid fa-user"></i><input type="text" id="athlete-name" class="form-control" placeholder="مثال: كابتن / أحمد خالد" autocomplete="off"></div>
+                    <small class="field-error" id="err-athlete-name"></small>
                 </div>
                 <div class="form-group">
-                    <label>العمر (سنة)</label>
-                    <input type="number" id="athlete-age" class="form-control" placeholder="22" value="22">
+                    <label for="athlete-age">العمر (سنة)</label>
+                    <div class="input-wrap"><i class="fa-solid fa-cake-candles"></i><input type="number" inputmode="numeric" id="athlete-age" class="form-control" placeholder="مثال: 22"></div>
+                    <small class="field-error" id="err-athlete-age"></small>
                 </div>
                 <div class="form-group">
-                    <label>الرياضة والمركز التخصصي</label>
-                    <input type="text" id="athlete-sport" class="form-control" placeholder="كرة قدم (جناح هجومي / سرعات)" value="كرة قدم (جناح / سرعات وانفجارية)">
+                    <label for="athlete-sport">الرياضة والمركز التخصصي</label>
+                    <div class="input-wrap"><i class="fa-solid fa-futbol"></i><input type="text" id="athlete-sport" class="form-control" placeholder="مثال: كرة قدم (جناح / سرعات وانفجارية)" autocomplete="off"></div>
+                    <small class="field-error" id="err-athlete-sport"></small>
                 </div>
                 <div class="form-group">
-                    <label>الطول (سم)</label>
-                    <input type="number" id="athlete-height" class="form-control" placeholder="181" value="181">
+                    <label for="athlete-height">الطول (سم)</label>
+                    <div class="input-wrap"><i class="fa-solid fa-ruler-vertical"></i><input type="number" inputmode="numeric" id="athlete-height" class="form-control" placeholder="مثال: 181"></div>
+                    <small class="field-error" id="err-athlete-height"></small>
                 </div>
                 <div class="form-group">
-                    <label>الوزن (كجم)</label>
-                    <input type="number" id="athlete-weight" class="form-control" placeholder="77" value="77">
+                    <label for="athlete-weight">الوزن (كجم)</label>
+                    <div class="input-wrap"><i class="fa-solid fa-weight-scale"></i><input type="number" inputmode="decimal" id="athlete-weight" class="form-control" placeholder="مثال: 77"></div>
+                    <small class="field-error" id="err-athlete-weight"></small>
                 </div>
                 <div class="form-group">
-                    <label>تاريخ الإصابات السابقة (إن وجد)</label>
-                    <input type="text" id="athlete-injuries" class="form-control" placeholder="إجهاد أوتار ركبة، التواء كاحل..." value="إجهاد متكرر بوتر أكيليس، شد بالعضلات الخلفية">
+                    <label for="athlete-injuries">تاريخ الإصابات السابقة <span class="opt">(إن وجد)</span></label>
+                    <div class="input-wrap"><i class="fa-solid fa-bandage"></i><input type="text" id="athlete-injuries" class="form-control" placeholder="مثال: إجهاد وتر أكيليس يمين، شد بالعضلات الخلفية" autocomplete="off"></div>
+                    <small class="field-error" id="err-athlete-injuries"></small>
+                </div>
+                <div class="form-group full-row">
+                    <label for="athlete-clinic">الطبيب / العيادة <span class="opt">(اختياري — يظهر في ترويسة التقرير)</span></label>
+                    <div class="input-wrap"><i class="fa-solid fa-user-doctor"></i><input type="text" id="athlete-clinic" class="form-control" placeholder="مثال: د. محمد سامي — عيادة الطب الرياضي" autocomplete="off"></div>
                 </div>
             </div>
 
-            <!-- PDF Upload Zone -->
+            <div class="btn-row">
+                <button class="btn-primary" onclick="goStep2()">التالي: رفع ملف التحليل <i class="fa-solid fa-arrow-left"></i></button>
+            </div>
+        </section>
+
+        <!-- ================= Step 2: upload ================= -->
+        <section class="glass-card step-panel" id="step-2">
             <div class="section-title"><i class="fa-solid fa-file-medical"></i> ملف الفحص الجيني المعملي (DNA Lab Report)</div>
-            <div class="upload-zone" id="drop-zone" onclick="document.getElementById('pdf-input').click()">
+
+            <input type="file" id="pdf-input" accept=".pdf,application/pdf" style="display: none;">
+
+            <label class="upload-zone" for="pdf-input" id="drop-zone">
                 <i class="fa-solid fa-file-pdf upload-icon"></i>
-                <h3 style="font-size: 1.15rem; margin-bottom: 0.25rem;">اضغط لرفع ملف الـ PDF أو اسحبه وأفلته هنا</h3>
-                <p style="color: var(--text-muted); font-size: 0.88rem;">يدعم ملفات التحاليل الجينية المعملية الشاملة</p>
-                <div class="selected-file-badge" id="file-badge">
-                    <i class="fa-solid fa-circle-check"></i> <span id="file-name-text"></span>
+                <h3>اضغط هنا لاختيار ملف الـ PDF أو اسحبه وأفلته هنا</h3>
+                <p>يدعم ملفات التحاليل الجينية المعملية الشاملة بصيغة PDF — حتى 15 ميجابايت</p>
+            </label>
+
+            <div class="file-card" id="file-card">
+                <i class="fa-solid fa-file-circle-check fi"></i>
+                <div class="file-meta">
+                    <div class="n" id="file-name-text"></div>
+                    <div class="s" id="file-size-text"></div>
                 </div>
-                <input type="file" id="pdf-input" accept="application/pdf" style="display: none;">
+                <button type="button" class="file-remove" title="إزالة الملف" onclick="removeFile()"><i class="fa-solid fa-xmark"></i></button>
             </div>
 
-            <button class="btn-analyze" id="btn-submit" disabled onclick="startAnalysis()">
-                <div class="spinner" id="spinner"></div>
-                <span id="btn-label"><i class="fa-solid fa-microchip"></i> توليد التقرير الجيني والإكلينيكي المكتمل</span>
-            </button>
-        </div>
+            <div class="inline-error" id="file-error" role="alert"><i class="fa-solid fa-circle-exclamation"></i><span id="file-error-text"></span></div>
 
-        <!-- Results Section (Production Ready - No internal tokens/cost visible) -->
-        <div id="results-container">
-            <div class="glass-card" style="padding: 2.25rem;">
-                <!-- Athlete Summary Banner -->
-                <div class="athlete-banner">
-                    <div class="athlete-info-grid">
-                        <div class="info-item">
-                            <span class="info-label">اسم الرياضي</span>
-                            <span class="info-value" id="res-athlete-name">--</span>
-                        </div>
-                        <div class="info-item">
-                            <span class="info-label">السن والقياسات</span>
-                            <span class="info-value" id="res-athlete-body">--</span>
-                        </div>
-                        <div class="info-item">
-                            <span class="info-label">الرياضة / التخصص</span>
-                            <span class="info-value" id="res-athlete-sport">--</span>
-                        </div>
-                        <div class="info-item">
-                            <span class="info-label">المعرف الإكلينيكي</span>
-                            <span class="info-value" id="res-clinical-id" style="font-family: 'JetBrains Mono'; color: var(--accent-cyan);">--</span>
-                        </div>
-                    </div>
-                    <div class="iri-badge">
-                        <div class="iri-title">مؤشر خطر الإصابة العام (IRI)</div>
-                        <div class="iri-score" id="res-iri-score">--</div>
-                    </div>
+            <div class="btn-row">
+                <button class="btn-secondary" onclick="showStep(1)"><i class="fa-solid fa-arrow-right"></i> رجوع للبيانات</button>
+                <button class="btn-primary big" id="btn-submit" onclick="startAnalysis()"><i class="fa-solid fa-microchip"></i> توليد التقرير الجيني والإكلينيكي</button>
+            </div>
+
+            <div class="loading-overlay" id="loading-overlay">
+                <div class="spinner"></div>
+                <div class="loading-msg" id="loading-msg">جاري قراءة الملف...</div>
+                <div class="indeterminate"></div>
+                <div class="loading-sub">قد تستغرق المعالجة حتى دقيقة — من فضلك لا تغلق الصفحة</div>
+            </div>
+        </section>
+
+        <!-- ================= Step 3: report ================= -->
+        <section class="glass-card step-panel" id="step-3">
+            <div class="back-bar">
+                <button class="btn-secondary" onclick="showStep(1)"><i class="fa-solid fa-pen"></i> تعديل البيانات</button>
+                <button class="btn-secondary" onclick="showStep(2)"><i class="fa-solid fa-rotate"></i> إعادة التوليد / تغيير الملف</button>
+                <button class="btn-secondary" onclick="newCase()"><i class="fa-solid fa-user-plus"></i> حالة جديدة</button>
+            </div>
+
+            <div class="report-head">
+                <div>
+                    <h2>تقرير الجاهزية الجينية والإكلينيكية</h2>
+                    <div class="sub" id="res-clinic-line"></div>
                 </div>
+                <div class="sub" id="res-date"></div>
+            </div>
 
-                <!-- 4 Tracks -->
-                <div class="tracks-grid">
-                    <div class="track-card">
-                        <div class="track-header"><i class="fa-solid fa-bolt"></i> [1] المسار الفسيولوجي والأداء (Talent & Performance)</div>
-                        <div class="track-content" id="track-1-body"></div>
-                    </div>
-
-                    <div class="track-card risk">
-                        <div class="track-header"><i class="fa-solid fa-shield-halved"></i> [2] مؤشر خطر الإصابات والتعافي (Injury Risk & Recovery)</div>
-                        <div class="track-content" id="track-2-body"></div>
-                    </div>
-
-                    <div class="track-card nutrition">
-                        <div class="track-header"><i class="fa-solid fa-flask-vial"></i> [3] التغذية الجينية الدقيقة (Precision Nutrigenomics)</div>
-                        <div class="track-content" id="track-3-body"></div>
-                    </div>
-
-                    <div class="track-card workload">
-                        <div class="track-header"><i class="fa-solid fa-heart-pulse"></i> [4] توجيهات الأحمال والعودة للعب (Workload & RTP)</div>
-                        <div class="track-content" id="track-4-body"></div>
-                    </div>
-                </div>
-
-                <!-- Print & Copy Actions -->
-                <div class="actions-footer">
-                    <button class="btn-secondary" onclick="window.print()"><i class="fa-solid fa-print"></i> طباعة التقرير الطبي</button>
-                    <button class="btn-secondary" onclick="copyFullReport()"><i class="fa-solid fa-copy"></i> نسخ التقرير</button>
+            <div class="athlete-banner">
+                <div class="athlete-info-grid">
+                    <div class="info-item"><span class="info-label">اسم الرياضي</span><span class="info-value" id="res-athlete-name">--</span></div>
+                    <div class="info-item"><span class="info-label">السن والقياسات</span><span class="info-value" id="res-athlete-body">--</span></div>
+                    <div class="info-item"><span class="info-label">الرياضة / التخصص</span><span class="info-value" id="res-athlete-sport">--</span></div>
+                    <div class="info-item"><span class="info-label">المعرف الإكلينيكي</span><span class="info-value" id="res-clinical-id" style="font-family: 'JetBrains Mono'; color: var(--accent-cyan);">--</span></div>
                 </div>
             </div>
-        </div>
+
+            <div class="invalid-notice" id="invalid-notice">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                <div>
+                    <div class="t">تنبيه إكلينيكي: الملف المرفوع غير مرتبط بالتحاليل الجينية</div>
+                    <div class="m" id="invalid-msg"></div>
+                </div>
+            </div>
+
+            <div class="tabs" role="tablist" id="tabs">
+                <button class="tab-btn active" data-tab="overview" role="tab"><i class="fa-solid fa-chart-pie"></i><span>نظرة عامة</span></button>
+                <button class="tab-btn" data-tab="t1" role="tab"><i class="fa-solid fa-bolt"></i><span>الأداء</span></button>
+                <button class="tab-btn" data-tab="t2" role="tab"><i class="fa-solid fa-shield-halved"></i><span>الإصابات</span></button>
+                <button class="tab-btn" data-tab="t3" role="tab"><i class="fa-solid fa-flask-vial"></i><span>التغذية</span></button>
+                <button class="tab-btn" data-tab="t4" role="tab"><i class="fa-solid fa-heart-pulse"></i><span>الأحمال</span></button>
+            </div>
+
+            <!-- Overview -->
+            <div class="tab-panel active" id="tab-overview">
+                <div class="summary-cards" id="summary-cards"></div>
+
+                <div class="visual-grid" id="visual-grid">
+                    <div class="vis-card">
+                        <div class="vis-title"><i class="fa-solid fa-gauge-high" style="color: var(--accent-amber)"></i> مؤشر خطر الإصابة (IRI)</div>
+                        <div id="gauge-wrap">
+                            <svg viewBox="0 0 200 125" id="gauge-svg" aria-label="مقياس خطر الإصابة"></svg>
+                            <div class="gauge-val" id="gauge-val">--</div>
+                            <div class="gauge-lvl" id="gauge-lvl"></div>
+                            <div class="gauge-legend">
+                                <span style="--c:#10b981">منخفض (أقل من 34)</span>
+                                <span style="--c:#f59e0b">متوسط (34–66)</span>
+                                <span style="--c:#f43f5e">مرتفع (67 فأكثر)</span>
+                            </div>
+                        </div>
+                        <div class="vis-msg" id="gauge-msg" style="display:none"></div>
+                    </div>
+                    <div class="vis-card">
+                        <div class="vis-title"><i class="fa-solid fa-spider" style="color: var(--accent-cyan)"></i> الملف العام للرياضي</div>
+                        <svg viewBox="0 0 420 340" id="radar-svg" aria-label="رسم راداري للملف العام"></svg>
+                        <div class="vis-msg" id="radar-msg" style="display:none"></div>
+                    </div>
+                </div>
+
+                <div class="body-map-card">
+                    <div class="body-map-title"><i class="fa-solid fa-person"></i> خريطة الإصابات المحتملة بناءً على التحليل الجيني</div>
+                    <div class="body-views">
+                        <div class="body-view"><div class="cap">من الأمام</div><svg id="svg-front" viewBox="0 0 200 400"></svg></div>
+                        <div class="body-view"><div class="cap">من الخلف</div><svg id="svg-back" viewBox="0 0 200 400"></svg></div>
+                    </div>
+                    <div class="injury-legend" id="injury-legend"></div>
+                    <div class="no-injury" id="no-injury"></div>
+                </div>
+            </div>
+
+            <div class="tab-panel" id="tab-t1">
+                <div class="track-card">
+                    <div class="track-header"><i class="fa-solid fa-bolt"></i> [1] المسار الفسيولوجي والأداء (Talent & Performance)</div>
+                    <div class="track-content" id="track-1-body"></div>
+                </div>
+            </div>
+            <div class="tab-panel" id="tab-t2">
+                <div class="track-card risk">
+                    <div class="track-header"><i class="fa-solid fa-shield-halved"></i> [2] مؤشر خطر الإصابات والتعافي (Injury Risk & Recovery)</div>
+                    <div class="track-content" id="track-2-body"></div>
+                </div>
+            </div>
+            <div class="tab-panel" id="tab-t3">
+                <div class="track-card nutrition">
+                    <div class="track-header"><i class="fa-solid fa-flask-vial"></i> [3] التغذية الجينية الدقيقة (Precision Nutrigenomics)</div>
+                    <div class="track-content" id="track-3-body"></div>
+                </div>
+            </div>
+            <div class="tab-panel" id="tab-t4">
+                <div class="track-card workload">
+                    <div class="track-header"><i class="fa-solid fa-heart-pulse"></i> [4] توجيهات الأحمال والعودة للعب (Workload & RTP)</div>
+                    <div class="track-content" id="track-4-body"></div>
+                </div>
+            </div>
+
+            <div class="disclaimer">
+                <i class="fa-solid fa-circle-info"></i>
+                <div>تنويه طبي: هذا التقرير أداة مساندة لاتخاذ القرار مبنية على نتائج التحليل الجيني والبيانات المُدخلة، وليس تشخيصًا طبيًا ولا بديلًا عن تقييم الطبيب المختص. المؤشرات الجينية تعبّر عن احتمالات وليست حتميات، ويجب مراجعتها مع طبيب الفريق قبل أي تعديل في البرنامج التدريبي أو الغذائي أو العلاجي.</div>
+            </div>
+
+            <div class="actions-footer">
+                <button class="btn-secondary" onclick="downloadPdf()"><i class="fa-solid fa-file-pdf"></i> تحميل PDF</button>
+                <button class="btn-secondary" onclick="printReport()"><i class="fa-solid fa-print"></i> طباعة التقرير</button>
+                <button class="btn-secondary" onclick="copyFullReport()"><i class="fa-solid fa-copy"></i> نسخ التقرير</button>
+            </div>
+        </section>
     </div>
 
-    <script>
-        const fileInput = document.getElementById('pdf-input');
-        const fileBadge = document.getElementById('file-badge');
-        const fileNameText = document.getElementById('file-name-text');
-        const btnSubmit = document.getElementById('btn-submit');
-        const dropZone = document.getElementById('drop-zone');
-        let fullRawReport = "";
+    <div class="toast" id="toast"></div>
 
-        fileInput.addEventListener('change', (e) => {
-            if (e.target.files.length > 0) handleFileSelect(e.target.files[0]);
+    <script>
+        const $ = (id) => document.getElementById(id);
+        let selectedPdfFile = null;
+        let fullRawReport = "";
+        let currentStep = 1, maxStep = 1;
+        let loadingTimer = null;
+        const MAX_MB = 15;
+
+        /* ===================== Toast ===================== */
+        let toastTimer = null;
+        function toast(msg) {
+            const t = $('toast');
+            t.textContent = msg;
+            t.classList.add('show');
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => t.classList.remove('show'), 3500);
+        }
+
+        /* ===================== Steps ===================== */
+        function showStep(n) {
+            currentStep = n;
+            maxStep = Math.max(maxStep, n);
+            document.querySelectorAll('.step-panel').forEach(p => p.classList.toggle('active', p.id === 'step-' + n));
+            document.querySelectorAll('.step-item').forEach(it => {
+                const k = +it.dataset.step;
+                it.classList.toggle('active', k === n);
+                it.classList.toggle('done', k < n);
+                it.classList.toggle('reachable', k <= maxStep && k !== n);
+            });
+            $('progress-fill').style.width = (n / 3 * 100) + '%';
+            $('progress-text').textContent = 'الخطوة ' + n + ' من 3';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        document.querySelectorAll('.step-item').forEach(it => {
+            it.addEventListener('click', () => {
+                const k = +it.dataset.step;
+                if (k <= maxStep && k !== currentStep && !$('loading-overlay').classList.contains('show')) {
+                    if (k === 3 && !reportReady) return;
+                    showStep(k);
+                }
+            });
         });
 
+        let reportReady = false;
+
+        function goStep2() {
+            if (validateStep1()) showStep(2);
+        }
+
+        /* ===================== Validation ===================== */
+        const RULES = {
+            'athlete-name':   { req: true, msg: 'أدخل اسم الرياضي.' },
+            'athlete-age':    { req: true, min: 10, max: 60, msg: 'العمر لازم يكون رقمًا بين 10 و 60 سنة.' },
+            'athlete-sport':  { req: true, msg: 'أدخل الرياضة والمركز التخصصي.' },
+            'athlete-height': { req: true, min: 120, max: 230, msg: 'الطول لازم يكون بين 120 و 230 سم.' },
+            'athlete-weight': { req: true, min: 30, max: 200, msg: 'الوزن لازم يكون بين 30 و 200 كجم.' }
+        };
+
+        function validateStep1() {
+            let firstBad = null;
+            Object.keys(RULES).forEach(id => {
+                const r = RULES[id], el = $(id), v = el.value.trim();
+                let ok = true;
+                if (r.req && !v) ok = false;
+                if (ok && r.min !== undefined) {
+                    const n = parseFloat(v);
+                    if (isNaN(n) || n < r.min || n > r.max) ok = false;
+                }
+                const group = el.closest('.form-group');
+                group.classList.toggle('invalid', !ok);
+                $('err-' + id).textContent = ok ? '' : r.msg;
+                if (!ok && !firstBad) firstBad = el;
+            });
+            if (firstBad) { firstBad.focus(); return false; }
+            return true;
+        }
+
+        Object.keys(RULES).forEach(id => {
+            $(id).addEventListener('input', () => $(id).closest('.form-group').classList.remove('invalid'));
+        });
+
+        /* ===================== File handling ===================== */
+        function showFileError(msg) {
+            $('file-error-text').textContent = msg;
+            $('file-error').classList.add('show');
+        }
+        function hideFileError() { $('file-error').classList.remove('show'); }
+
+        function formatSize(bytes) {
+            if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+            return (bytes / 1024 / 1024).toFixed(2) + ' MB';
+        }
+
+        function setFile(file) {
+            hideFileError();
+            if (!file) return;
+            const isPdf = file.type === 'application/pdf' || /\.pdf$/i.test(file.name);
+            if (!isPdf) { showFileError('الملف المختار ليس PDF. اختر ملف التحليل الجيني بصيغة PDF.'); return; }
+            if (file.size === 0) { showFileError('الملف فارغ. اختر ملفًا صالحًا.'); return; }
+            if (file.size > MAX_MB * 1024 * 1024) { showFileError('حجم الملف (' + formatSize(file.size) + ') أكبر من الحد المسموح (' + MAX_MB + ' ميجابايت).'); return; }
+            selectedPdfFile = file;
+            $('file-name-text').textContent = file.name;
+            $('file-size-text').textContent = formatSize(file.size) + ' • PDF';
+            $('file-card').classList.add('show');
+        }
+
+        function removeFile() {
+            selectedPdfFile = null;
+            $('file-card').classList.remove('show');
+            $('pdf-input').value = '';
+            hideFileError();
+        }
+
+        $('pdf-input').addEventListener('change', (e) => {
+            setFile(e.target.files && e.target.files[0]);
+            e.target.value = '';
+        });
+
+        const dropZone = $('drop-zone');
         dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('dragover'); });
         dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
         dropZone.addEventListener('drop', (e) => {
             e.preventDefault();
             dropZone.classList.remove('dragover');
-            if (e.dataTransfer.files.length > 0) {
-                fileInput.files = e.dataTransfer.files;
-                handleFileSelect(e.dataTransfer.files[0]);
-            }
+            if (e.dataTransfer.files && e.dataTransfer.files.length > 0) setFile(e.dataTransfer.files[0]);
         });
 
-        function handleFileSelect(file) {
-            fileNameText.textContent = file.name;
-            fileBadge.style.display = 'inline-flex';
-            btnSubmit.disabled = false;
+        /* ===================== Loading overlay ===================== */
+        const LOADING_MSGS = [
+            'جاري قراءة ملف التحليل...',
+            'استخراج المتغيرات الجينية...',
+            'تقييم الأداء والقدرات البدنية...',
+            'حساب مؤشر خطر الإصابة...',
+            'إعداد بروتوكولات التغذية والأحمال...',
+            'مراجعة التقرير النهائي...'
+        ];
+        function setLoading(on) {
+            $('loading-overlay').classList.toggle('show', on);
+            $('btn-submit').disabled = on;
+            clearInterval(loadingTimer);
+            if (on) {
+                let i = 0;
+                $('loading-msg').textContent = LOADING_MSGS[0];
+                loadingTimer = setInterval(() => {
+                    i = Math.min(i + 1, LOADING_MSGS.length - 1);
+                    $('loading-msg').textContent = LOADING_MSGS[i];
+                }, 4000);
+            }
+        }
+
+        /* ===================== Analysis ===================== */
+        function getMeta() {
+            const v = (id) => $(id).value.trim();
+            return {
+                name: v('athlete-name') || 'غير محدد',
+                age: v('athlete-age') || '--',
+                sport: v('athlete-sport') || 'غير محدد',
+                height: v('athlete-height') || '--',
+                weight: v('athlete-weight') || '--',
+                injuries: v('athlete-injuries'),
+                clinic: v('athlete-clinic')
+            };
         }
 
         async function startAnalysis() {
-            if (!fileInput.files[0]) return;
+            if (!validateStep1()) { showStep(1); return; }
+            if (!selectedPdfFile) { showFileError('ارفع ملف التحليل الجيني (PDF) أولاً.'); return; }
+            hideFileError();
 
-            const spinner = document.getElementById('spinner');
-            const btnLabel = document.getElementById('btn-label');
-            const resultsSection = document.getElementById('results-container');
-
-            btnSubmit.disabled = true;
-            spinner.style.display = 'block';
-            btnLabel.innerHTML = 'جاري التقييم الفسيولوجي والربط الجيني عبر الذكاء الاصطناعي...';
-
+            const meta = getMeta();
             const formData = new FormData();
-            formData.append('pdf', fileInput.files[0]);
-            formData.append('name', document.getElementById('athlete-name').value);
-            formData.append('age', document.getElementById('athlete-age').value);
-            formData.append('sport', document.getElementById('athlete-sport').value);
-            formData.append('height', document.getElementById('athlete-height').value);
-            formData.append('weight', document.getElementById('athlete-weight').value);
-            formData.append('injuries', document.getElementById('athlete-injuries').value);
+            formData.append('pdf', selectedPdfFile);
+            formData.append('name', $('athlete-name').value.trim());
+            formData.append('age', $('athlete-age').value.trim());
+            formData.append('sport', $('athlete-sport').value.trim());
+            formData.append('height', $('athlete-height').value.trim());
+            formData.append('weight', $('athlete-weight').value.trim());
+            formData.append('injuries', $('athlete-injuries').value.trim());
+
+            setLoading(true);
+            const controller = new AbortController();
+            const timeout = setTimeout(() => controller.abort(), 180000);
 
             try {
-                const response = await fetch('/api/analyze', { method: 'POST', body: formData });
-                const data = await response.json();
+                const response = await fetch('/api/analyze', { method: 'POST', body: formData, signal: controller.signal });
+                let data = null;
+                try { data = await response.json(); } catch (_) {}
+                if (!data) throw new Error('رد غير متوقع من الخادم (' + response.status + ')');
+                if (response.status >= 500) throw new Error(data.error || 'خطأ داخلي في الخادم (' + response.status + ')');
 
                 if (data.success) {
-                    fullRawReport = data.report;
-                    renderReportUI(data.report, {
-                        name: document.getElementById('athlete-name').value,
-                        age: document.getElementById('athlete-age').value,
-                        sport: document.getElementById('athlete-sport').value,
-                        height: document.getElementById('athlete-height').value,
-                        weight: document.getElementById('athlete-weight').value
-                    });
-                    resultsSection.style.display = 'block';
-                    resultsSection.scrollIntoView({ behavior: 'smooth' });
+                    renderReportUI(data.report, meta);
                 } else {
-                    alert('خطأ: ' + (data.error || 'فشل في تحليل الملف'));
+                    // مستند غير صالح: نعرض صفحة النتائج مع تنبيه واضح بدل النافذة المنبثقة
+                    renderInvalidUI(data.error || 'المستند المرفوع لا يحتوي على تحاليل جينية صالحة.', meta);
                 }
+                reportReady = true;
+                activateTab('overview');
+                showStep(3);
             } catch (err) {
-                alert('حدث خطأ في الاتصال بالخادم: ' + err.message);
+                const msg = err.name === 'AbortError'
+                    ? 'انتهت مهلة المعالجة. حاول مرة أخرى أو ارفع ملفًا أصغر.'
+                    : 'تعذّر إكمال التحليل: ' + err.message + ' — تأكد من الاتصال وحاول مرة أخرى.';
+                showFileError(msg);
             } finally {
-                btnSubmit.disabled = false;
-                spinner.style.display = 'none';
-                btnLabel.innerHTML = '<i class="fa-solid fa-microchip"></i> توليد التقرير الجيني والإكلينيكي المكتمل';
+                clearTimeout(timeout);
+                setLoading(false);
             }
+        }
+
+        function newCase() {
+            if (!confirm('بدء حالة جديدة؟ سيتم مسح البيانات والتقرير الحالي.')) return;
+            ['athlete-name', 'athlete-age', 'athlete-sport', 'athlete-height', 'athlete-weight', 'athlete-injuries', 'athlete-clinic'].forEach(id => $(id).value = '');
+            document.querySelectorAll('.form-group.invalid').forEach(g => g.classList.remove('invalid'));
+            removeFile();
+            reportReady = false; fullRawReport = ''; maxStep = 1;
+            showStep(1);
+        }
+
+        /* ===================== Tabs ===================== */
+        function activateTab(name) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === name));
+            document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('active', p.id === 'tab-' + name));
+        }
+        $('tabs').addEventListener('click', (e) => {
+            const b = e.target.closest('.tab-btn');
+            if (b) activateTab(b.dataset.tab);
+        });
+
+        /* ===================== Report rendering ===================== */
+        function setMeta(meta) {
+            $('res-athlete-name').textContent = meta.name;
+            $('res-athlete-sport').textContent = meta.sport;
+            $('res-athlete-body').textContent = `${meta.age} سنة | ${meta.height} سم | ${meta.weight} كجم`;
+            $('res-clinic-line').textContent = meta.clinic ? meta.clinic : '';
+            $('res-date').textContent = new Date().toLocaleDateString('ar-EG', { year: 'numeric', month: 'long', day: 'numeric' });
+        }
+
+        function renderInvalidUI(message, meta) {
+            setMeta(meta);
+            fullRawReport = message;
+            $('res-clinical-id').textContent = '—';
+            $('invalid-msg').textContent = message;
+            $('invalid-notice').style.display = 'flex';
+            $('summary-cards').innerHTML = '';
+            $('visual-grid').style.display = 'none';
+            renderBodyMap('', '');
+
+            const na = 'غير متاح — الملف المرفوع لا يحتوي على تحاليل جينية صالحة، لذلك لم يتم توليد هذا المسار.';
+            ['track-1-body', 'track-2-body', 'track-3-body', 'track-4-body'].forEach(id => { $(id).textContent = na; });
         }
 
         function renderReportUI(reportText, meta) {
-            document.getElementById('res-athlete-name').textContent = meta.name;
-            document.getElementById('res-athlete-sport').textContent = meta.sport;
-            document.getElementById('res-athlete-body').textContent = `${meta.age} سنة | ${meta.height} سم | ${meta.weight} كجم`;
-            
-            // Extract Clinical ID & IRI Score
-            const lines = reportText.split('\n');
-            let clinicalId = "SG-2026-PRO";
-            let iriScore = "74% - مرتفع ⚠️";
-
-            for (let line of lines) {
-                if (line.includes("المعرف الإكلينيكي:")) clinicalId = line.split("المعرف الإكلينيكي:")[1].split("•")[0].trim();
-                if (line.includes("مؤشر خطر الإصابة العام (IRI):")) iriScore = line.split("مؤشر خطر الإصابة العام (IRI):")[1].trim();
+            if (typeof reportText !== 'string') {
+                if (Array.isArray(reportText)) {
+                    reportText = reportText.map(b => (typeof b === 'object' && b.text) ? b.text : JSON.stringify(b)).join('\n');
+                } else if (typeof reportText === 'object' && reportText !== null) {
+                    reportText = reportText.text || JSON.stringify(reportText);
+                } else {
+                    reportText = String(reportText || '');
+                }
             }
+            fullRawReport = reportText;
+            $('invalid-notice').style.display = 'none';
+            setMeta(meta);
 
-            document.getElementById('res-clinical-id').textContent = clinicalId;
-            document.getElementById('res-iri-score').textContent = iriScore.replace(/[\[\]]/g, '');
+            let clinicalId = "SG-2026-PRO";
+            let iriScore = "";
 
-            document.getElementById('track-1-body').textContent = extractSection(reportText, "[1]", "[2]");
-            document.getElementById('track-2-body').textContent = extractSection(reportText, "[2]", "[3]");
-            document.getElementById('track-3-body').textContent = extractSection(reportText, "[3]", "[4]");
-            document.getElementById('track-4-body').textContent = extractSection(reportText, "[4]", "====");
+            const lines = reportText.split('\n');
+            for (let line of lines) {
+                if (line.includes("المعرف الإكلينيكي:")) {
+                    const parts = line.split("المعرف الإكلينيكي:");
+                    if (parts[1]) clinicalId = parts[1].split("•")[0].trim();
+                }
+                if (line.includes("مؤشر خطر الإصابة العام (IRI):")) {
+                    const parts = line.split("مؤشر خطر الإصابة العام (IRI):");
+                    if (parts[1]) iriScore = parts[1].trim();
+                }
+            }
+            iriScore = iriScore.replace(/[\[\]]/g, '');
+            $('res-clinical-id').textContent = clinicalId;
+
+            const t1 = extractSection(reportText, "[1]", "[2]");
+            const t2 = extractSection(reportText, "[2]", "[3]");
+            const t3 = extractSection(reportText, "[3]", "[4]");
+            const t4 = extractSection(reportText, "[4]", "================================================================================");
+
+            renderBodyMap(reportText, t2);
+            renderVisuals(iriScore, reportText, parsePredictedRisks(reportText, t2));
+
+            if (t1) {
+                $('track-1-body').textContent = t1;
+                $('track-2-body').textContent = t2 || "بيانات المسار الثاني قيد المراجعة.";
+                $('track-3-body').textContent = t3 || "بيانات التغذية قيد المراجعة.";
+                $('track-4-body').textContent = t4 || "بيانات الأحمال قيد المراجعة.";
+            } else {
+                $('track-1-body').textContent = reportText;
+                $('track-2-body').textContent = "تم تضمين كامل التقرير الإكلينيكي في المسار الأول.";
+                $('track-3-body').textContent = "تم تضمين كامل التقرير الإكلينيكي في المسار الأول.";
+                $('track-4-body').textContent = "تم تضمين كامل التقرير الإكلينيكي في المسار الأول.";
+            }
         }
 
-        function extractSection(text, startKeyword, endKeyword) {
-            try {
-                const start = text.indexOf(startKeyword);
-                if (start === -1) return text;
-                const afterStart = text.substring(start);
-                const firstBreak = afterStart.indexOf('\n--------------------------------------------------------------------------------\n');
-                const contentStart = firstBreak !== -1 ? firstBreak + 82 : afterStart.indexOf('\n') + 1;
-                let end = afterStart.indexOf(endKeyword, contentStart);
-                if (end === -1) end = afterStart.length;
-                return afterStart.substring(contentStart, end).trim();
-            } catch (e) {
-                return text;
+        function extractSection(text, startKeyword, nextKeyword) {
+            if (!text) return "";
+            const startIdx = text.indexOf(startKeyword);
+            if (startIdx === -1) return "";
+
+            let endIdx = text.length;
+            if (nextKeyword) {
+                const nextPos = text.indexOf(nextKeyword, startIdx + startKeyword.length);
+                if (nextPos !== -1) endIdx = nextPos;
             }
+
+            const sectionRaw = text.substring(startIdx, endIdx);
+            const lines = sectionRaw.split('\n');
+
+            const cleanLines = lines.filter(line => {
+                const trimmed = line.trim();
+                if (!trimmed) return false;
+                if (trimmed.startsWith(startKeyword)) return false;
+                if (/^[=\-—_]{3,}$/.test(trimmed)) return false;
+                return true;
+            });
+
+            return cleanLines.join('\n\n').trim();
+        }
+
+        /* ===================== Summary visuals (cards / gauge / radar) ===================== */
+        const LVL = {
+            low:  { c: '#10b981', t: 'منخفض' },
+            med:  { c: '#f59e0b', t: 'متوسط' },
+            high: { c: '#f43f5e', t: 'مرتفع' }
+        };
+        const NS = 'http://www.w3.org/2000/svg';
+
+        function iriLevel(n) { return n < 34 ? 'low' : n < 67 ? 'med' : 'high'; }
+        function levelFromText(t) {
+            const s = normalizeAr(t);
+            if (/مرتفع|عالي|شديد/.test(s)) return 'high';
+            if (/متوسط/.test(s)) return 'med';
+            if (/منخفض|قليل/.test(s)) return 'low';
+            return null;
+        }
+
+        function svgEl(tag, attrs, text) {
+            const el = document.createElementNS(NS, tag);
+            Object.keys(attrs || {}).forEach(k => el.setAttribute(k, attrs[k]));
+            if (text !== undefined) el.textContent = text;
+            return el;
+        }
+
+        function arcPath(a, b) {
+            const r = 80, cx = 100, cy = 100;
+            const pt = v => { const t = Math.PI * (1 - v / 100); return [cx + r * Math.cos(t), cy - r * Math.sin(t)]; };
+            const [x1, y1] = pt(a), [x2, y2] = pt(b);
+            return `M ${x1.toFixed(2)} ${y1.toFixed(2)} A ${r} ${r} 0 0 1 ${x2.toFixed(2)} ${y2.toFixed(2)}`;
+        }
+
+        function drawGauge(value, level) {
+            const svg = $('gauge-svg');
+            svg.innerHTML = '';
+            [[0, 33.3, LVL.low.c], [33.3, 66.7, LVL.med.c], [66.7, 100, LVL.high.c]].forEach(([a, b, c]) => {
+                svg.appendChild(svgEl('path', { d: arcPath(a, b), fill: 'none', stroke: c, 'stroke-width': 16, 'stroke-linecap': 'butt' }));
+            });
+            svg.appendChild(svgEl('text', { x: 20, y: 120, 'text-anchor': 'middle', class: 'svg-label', 'font-size': 10 }, '0'));
+            svg.appendChild(svgEl('text', { x: 180, y: 120, 'text-anchor': 'middle', class: 'svg-label', 'font-size': 10 }, '100'));
+            const needle = svgEl('g', { id: 'gauge-needle', style: 'transform-origin:100px 100px; transform:rotate(0deg)' });
+            needle.appendChild(svgEl('line', { x1: 100, y1: 100, x2: 34, y2: 100, stroke: '#f8fafc', 'stroke-width': 3.5, 'stroke-linecap': 'round' }));
+            svg.appendChild(needle);
+            svg.appendChild(svgEl('circle', { cx: 100, cy: 100, r: 7, fill: LVL[level].c, stroke: '#f8fafc', 'stroke-width': 2 }));
+            requestAnimationFrame(() => requestAnimationFrame(() => {
+                needle.style.transform = 'rotate(' + (value * 1.8) + 'deg)';
+            }));
+        }
+
+        const AXES = [
+            { key: 'strength',  label: 'القوة',          kw: ['قوه'] },
+            { key: 'endurance', label: 'التحمل',         kw: ['تحمل'] },
+            { key: 'injury',    label: 'مقاومة الإصابة', kw: ['اصابه', 'مقاومه'] },
+            { key: 'recovery',  label: 'التعافي',        kw: ['تعافي'] },
+            { key: 'nutrition', label: 'التغذية',        kw: ['تغذيه'] }
+        ];
+
+        // سطر منظم من الـ AI: "درجات الملف: قوة=80، تحمل=65، إصابة=70، تعافي=55، تغذية=60" (0-100، الأعلى = الأفضل)
+        function parseScores(reportText) {
+            const line = (reportText || '').split('\n').find(l => normalizeAr(l).includes('درجات الملف'));
+            if (!line || !line.includes(':')) return [];
+            const out = [];
+            line.split(':').slice(1).join(':').split(/[,،;]/).forEach(item => {
+                const s = normalizeAr(item);
+                const m = s.match(/(\d+(?:\.\d+)?)/);
+                if (!m) return;
+                const ax = AXES.find(a => a.kw.some(k => s.includes(k)));
+                if (ax && !out.find(o => o.key === ax.key)) {
+                    out.push({ key: ax.key, label: ax.label, value: Math.max(0, Math.min(100, parseFloat(m[1]))) });
+                }
+            });
+            // ترتيب ثابت للمحاور
+            return AXES.map(a => out.find(o => o.key === a.key)).filter(Boolean);
+        }
+
+        function drawRadar(scores) {
+            const svg = $('radar-svg');
+            svg.innerHTML = '';
+            const n = scores.length, cx = 210, cy = 170, R = 105;
+            const ang = i => -Math.PI / 2 + 2 * Math.PI * i / n;
+            const pt = (i, v) => [cx + R * v / 100 * Math.cos(ang(i)), cy + R * v / 100 * Math.sin(ang(i))];
+            [25, 50, 75, 100].forEach(r => {
+                const pts = scores.map((_, i) => pt(i, r).map(x => x.toFixed(1)).join(',')).join(' ');
+                svg.appendChild(svgEl('polygon', { points: pts, class: 'svg-grid' }));
+            });
+            scores.forEach((_, i) => {
+                const [x, y] = pt(i, 100);
+                svg.appendChild(svgEl('line', { x1: cx, y1: cy, x2: x, y2: y, class: 'svg-grid' }));
+            });
+            const poly = scores.map((s, i) => pt(i, s.value).map(x => x.toFixed(1)).join(',')).join(' ');
+            svg.appendChild(svgEl('polygon', { points: poly, fill: 'rgba(56,189,248,0.25)', stroke: '#38bdf8', 'stroke-width': 2.5, 'stroke-linejoin': 'round' }));
+            scores.forEach((s, i) => {
+                const [x, y] = pt(i, s.value);
+                svg.appendChild(svgEl('circle', { cx: x, cy: y, r: 4.5, fill: '#38bdf8', stroke: '#0a0f1d', 'stroke-width': 1.5 }));
+                const lx = cx + (R + 24) * Math.cos(ang(i)), ly = cy + (R + 24) * Math.sin(ang(i));
+                const c = Math.cos(ang(i));
+                const anchor = c > 0.3 ? 'start' : c < -0.3 ? 'end' : 'middle';
+                svg.appendChild(svgEl('text', { x: lx, y: ly - 2, 'text-anchor': anchor, class: 'svg-label' }, s.label));
+                svg.appendChild(svgEl('text', { x: lx, y: ly + 13, 'text-anchor': anchor, class: 'svg-val' }, String(Math.round(s.value))));
+            });
+        }
+
+        function sumCard(icon, color, label, value, sub) {
+            const d = document.createElement('div');
+            d.className = 'sum-card';
+            const ic = document.createElement('div');
+            ic.className = 'ic';
+            ic.style.background = color + '26';
+            ic.style.color = color;
+            ic.innerHTML = '<i class="fa-solid ' + icon + '"></i>';
+            const body = document.createElement('div');
+            const l = document.createElement('div'); l.className = 'lb'; l.textContent = label;
+            const v = document.createElement('div'); v.className = 'vl'; v.textContent = value;
+            const s = document.createElement('div'); s.className = 'sb'; s.textContent = sub || '';
+            body.append(l, v, s);
+            d.append(ic, body);
+            return d;
+        }
+
+        function renderVisuals(iriText, reportText, risks) {
+            $('visual-grid').style.display = '';
+            const cards = $('summary-cards');
+            cards.innerHTML = '';
+
+            // ---- IRI gauge ----
+            const m = (iriText || '').match(/(\d+(?:\.\d+)?)/);
+            const iri = m ? Math.max(0, Math.min(100, parseFloat(m[1]))) : null;
+            const lvl = iri !== null ? iriLevel(iri) : levelFromText(iriText);
+            if (iri !== null) {
+                $('gauge-wrap').style.display = '';
+                $('gauge-msg').style.display = 'none';
+                drawGauge(iri, lvl);
+                $('gauge-val').textContent = Math.round(iri);
+                $('gauge-val').style.color = LVL[lvl].c;
+                $('gauge-lvl').textContent = 'خطر ' + LVL[lvl].t;
+                $('gauge-lvl').style.color = LVL[lvl].c;
+            } else {
+                $('gauge-wrap').style.display = 'none';
+                $('gauge-msg').style.display = '';
+                $('gauge-msg').textContent = iriText ? 'المؤشر: ' + iriText : 'لم يرسل التقرير قيمة رقمية لمؤشر IRI.';
+            }
+            cards.appendChild(sumCard('fa-gauge-high', lvl ? LVL[lvl].c : '#94a3b8', 'مؤشر خطر الإصابة (IRI)',
+                iri !== null ? Math.round(iri) + ' / 100' : (iriText || '—'), lvl ? 'خطر ' + LVL[lvl].t : 'غير متوفر'));
+
+            // ---- Top risk area ----
+            const keys = Object.keys(risks).sort((a, b) => RANK[risks[b].level] - RANK[risks[a].level]);
+            if (keys.length) {
+                const k = keys[0], s = risks[k];
+                const side = (s.r && s.l) ? '' : s.r ? ' (يمين)' : ' (يسار)';
+                cards.appendChild(sumCard('fa-bullseye', LVL[s.level].c, 'أعلى منطقة عرضة للإصابة', REGIONS[k].l + side, 'خطر ' + LVL[s.level].t));
+            } else {
+                cards.appendChild(sumCard('fa-bullseye', '#94a3b8', 'أعلى منطقة عرضة للإصابة', '—', 'لم يحدد التقرير مناطق'));
+            }
+
+            // ---- Radar + strongest / weakest ----
+            const scores = parseScores(reportText);
+            if (scores.length >= 3) {
+                $('radar-svg').style.display = '';
+                $('radar-msg').style.display = 'none';
+                drawRadar(scores);
+                const best = scores.reduce((a, b) => b.value > a.value ? b : a);
+                const worst = scores.reduce((a, b) => b.value < a.value ? b : a);
+                cards.appendChild(sumCard('fa-trophy', '#10b981', 'أقوى محور', best.label, Math.round(best.value) + ' / 100'));
+                cards.appendChild(sumCard('fa-arrow-trend-up', '#f59e0b', 'أولوية التطوير', worst.label, Math.round(worst.value) + ' / 100'));
+            } else {
+                $('radar-svg').style.display = 'none';
+                $('radar-msg').style.display = '';
+                $('radar-msg').textContent = 'لم يرسل التقرير درجات الملف العام (قوة / تحمل / مقاومة إصابة / تعافي / تغذية)، لذلك لا يمكن رسم المخطط.';
+                cards.appendChild(sumCard('fa-trophy', '#94a3b8', 'أقوى محور', '—', 'غير متوفر'));
+                cards.appendChild(sumCard('fa-arrow-trend-up', '#94a3b8', 'أولوية التطوير', '—', 'غير متوفر'));
+            }
+        }
+
+        /* ===================== Print / PDF / Copy ===================== */
+        function printReport() { window.print(); }
+
+        function downloadPdf() {
+            const old = document.title;
+            const d = new Date().toISOString().slice(0, 10);
+            document.title = 'تقرير-' + getMeta().name.replace(/[\\/:*?"<>|]/g, '') + '-' + d;
+            window.addEventListener('afterprint', () => { document.title = old; }, { once: true });
+            toast('في نافذة الطباعة اختر الوجهة "حفظ بصيغة PDF"');
+            setTimeout(() => window.print(), 600);
         }
 
         function copyFullReport() {
-            navigator.clipboard.writeText(fullRawReport);
-            alert('تم نسخ التقرير الطبي بالكامل بنجاح! 📋');
+            if (!navigator.clipboard) { toast('المتصفح لا يدعم النسخ التلقائي.'); return; }
+            navigator.clipboard.writeText(fullRawReport).then(
+                () => toast('تم نسخ التقرير الطبي بالكامل ✔'),
+                () => toast('تعذّر النسخ — انسخ النص يدويًا.')
+            );
         }
+
+        /* ===================== Body map ===================== */
+        // v: f = front only, b = back only, fb = both. pair = left/right copies (dx from center).
+        const REGIONS = {
+            head:      { l: 'الرأس',            v: 'fb', t: 'e', cx: 100, cy: 32,  rx: 17, ry: 21 },
+            neck:      { l: 'الرقبة',           v: 'fb', t: 'r', x: 92,  y: 52,  w: 16, h: 14, r: 5 },
+            shoulder:  { l: 'الكتف',            v: 'fb', t: 'e', pair: 1, dx: 32, cy: 78,  rx: 16, ry: 12 },
+            chest:     { l: 'الصدر',            v: 'f',  t: 'r', x: 76,  y: 68,  w: 48, h: 34, r: 10 },
+            abs:       { l: 'عضلات البطن',      v: 'f',  t: 'r', x: 80,  y: 104, w: 40, h: 44, r: 8 },
+            upperback: { l: 'أعلى الظهر',       v: 'b',  t: 'r', x: 76,  y: 68,  w: 48, h: 42, r: 10 },
+            lowerback: { l: 'أسفل الظهر / القطنية', v: 'b', t: 'r', x: 80, y: 112, w: 40, h: 38, r: 8 },
+            upperarm:  { l: 'العضد / المرفق',   v: 'fb', t: 'e', pair: 1, dx: 46, cy: 112, rx: 9,  ry: 26 },
+            forearm:   { l: 'الساعد / الرسغ',   v: 'fb', t: 'e', pair: 1, dx: 54, cy: 165, rx: 8,  ry: 24 },
+            hand:      { l: 'اليد',             v: 'fb', t: 'e', pair: 1, dx: 58, cy: 200, rx: 7,  ry: 11 },
+            groin:     { l: 'منطقة الأربية / الحوض', v: 'f', t: 'e', cx: 100, cy: 160, rx: 22, ry: 14 },
+            glute:     { l: 'الألوية',          v: 'b',  t: 'e', pair: 1, dx: 12, cy: 168, rx: 14, ry: 14 },
+            quad:      { l: 'الفخذ الأمامي',    v: 'f',  t: 'e', pair: 1, dx: 16, cy: 215, rx: 16, ry: 42 },
+            hamstring: { l: 'العضلات الخلفية (الهامسترنج)', v: 'b', t: 'e', pair: 1, dx: 16, cy: 222, rx: 16, ry: 40 },
+            knee:      { l: 'الركبة',           v: 'f',  t: 'e', pair: 1, dx: 16, cy: 268, rx: 12, ry: 12 },
+            shin:      { l: 'الساق / القصبة',   v: 'f',  t: 'e', pair: 1, dx: 17, cy: 315, rx: 10, ry: 33 },
+            calf:      { l: 'السمانة',          v: 'b',  t: 'e', pair: 1, dx: 17, cy: 312, rx: 11, ry: 30 },
+            ankle:     { l: 'الكاحل',           v: 'f',  t: 'e', pair: 1, dx: 17, cy: 356, rx: 8,  ry: 9 },
+            achilles:  { l: 'وتر أكيليس',       v: 'b',  t: 'e', pair: 1, dx: 17, cy: 350, rx: 5,  ry: 13 },
+            foot:      { l: 'القدم',            v: 'fb', t: 'e', pair: 1, dx: 20, cy: 382, rx: 11, ry: 8 }
+        };
+
+        // keywords are normalized (no hamza/taa marbuta); "=" prefix = exact word match
+        const KEYWORDS = {
+            achilles:  ['اكيليس', 'عرقوب'],
+            hamstring: ['خلفيه', 'هامسترنج', 'hamstring', 'الوتريه الخلفيه'],
+            calf:      ['سمانه', 'ربله'],
+            knee:      ['ركبه', 'صليبي', 'مينيسكس', 'غضروف', 'رضفه'],
+            ankle:     ['كاحل'],
+            foot:      ['قدم', 'مشط', 'كعب', 'اخمص'],
+            quad:      ['فخذ', 'كواد', 'رباعيه'],
+            groin:     ['اربيه', 'حوض', 'ضامه', 'groin'],
+            shoulder:  ['كتف', 'ترقوه'],
+            lowerback: ['ظهر', 'فقرات', 'ديسك', 'قطني'],
+            neck:      ['رقبه'],
+            chest:     ['صدر', 'ضلع', 'اضلاع'],
+            abs:       ['بطن'],
+            upperarm:  ['ذراع', 'عضد', 'مرفق'],
+            forearm:   ['ساعد', 'رسغ'],
+            hand:      ['=يد', 'اصبع'],
+            head:      ['راس', 'ارتجاج', 'جمجمه'],
+            shin:      ['قصبه', 'ساق', 'شين'],
+            glute:     ['اليه', 'الويه']
+        };
+
+        function normalizeAr(s) {
+            return (s || '').toLowerCase()
+                .replace(/[\u064B-\u0652\u0640]/g, '')
+                .replace(/[أإآ]/g, 'ا').replace(/ة/g, 'ه').replace(/ى/g, 'ي');
+        }
+
+        function matchKeyword(seg, tokens, kw) {
+            if (kw[0] === '=') {
+                const w = kw.slice(1);
+                return tokens.some(t => t === w || t === 'ال' + w || t === 'ب' + w || t === 'بال' + w);
+            }
+            return seg.includes(kw);
+        }
+
+        const RANK = { low: 1, med: 2, high: 3 };
+        const LEVEL_AR = { high: 'خطر مرتفع', med: 'خطر متوسط', low: 'خطر منخفض' };
+
+        function detectLevel(seg, dflt) {
+            if (/مرتفع|عالي|شديد/.test(seg)) return 'high';
+            if (/متوسط/.test(seg)) return 'med';
+            if (/منخفض|قليل|ضعيف/.test(seg)) return 'low';
+            return dflt;
+        }
+
+        // يضيف المناطق المذكورة في segment إلى found مع الجنب (يمين/يسار) ومستوى الخطر
+        function parseSegment(rawSeg, dfltLevel, found) {
+            const seg = normalizeAr(rawSeg).trim();
+            if (!seg) return;
+            const tokens = seg.split(/\s+/);
+            const sideR = seg.includes('يمين'), sideL = seg.includes('يسار');
+            const sides = (sideR && !sideL) ? { r: true, l: false } : (sideL && !sideR) ? { r: false, l: true } : { r: true, l: true };
+            const level = detectLevel(seg, dfltLevel);
+            Object.keys(KEYWORDS).forEach(key => {
+                if (KEYWORDS[key].some(kw => matchKeyword(seg, tokens, kw))) {
+                    const cur = found[key] || { r: false, l: false, level: 'low' };
+                    found[key] = {
+                        r: cur.r || sides.r,
+                        l: cur.l || sides.l,
+                        level: RANK[level] > RANK[cur.level] ? level : cur.level
+                    };
+                }
+            });
+        }
+
+        // المصدر الأول: سطر منظم من الـ AI: "مناطق الخطر المحتملة: وتر أكيليس يمين (مرتفع)، الهامسترنج (متوسط)"
+        // المصدر الاحتياطي: مسح نص المسار [2] سطراً بسطر
+        function parsePredictedRisks(reportText, track2Text) {
+            const found = {};
+            const lines = (reportText || '').split('\n');
+            const structured = lines.find(l => normalizeAr(l).includes('مناطق الخطر'));
+            if (structured && structured.includes(':')) {
+                structured.split(':').slice(1).join(':').split(/[,،;]/).forEach(item => parseSegment(item, 'med', found));
+            }
+            if (!Object.keys(found).length) {
+                (track2Text || '').split('\n').forEach(line => {
+                    if (!line.trim() || normalizeAr(line).includes('لا يوجد')) return;
+                    parseSegment(line, 'med', found);
+                });
+            }
+            return found;
+        }
+
+        function shapeEl(reg, cxOverride, label, level) {
+            const ns = 'http://www.w3.org/2000/svg';
+            let el;
+            if (reg.t === 'e') {
+                el = document.createElementNS(ns, 'ellipse');
+                el.setAttribute('cx', cxOverride ?? reg.cx);
+                el.setAttribute('cy', reg.cy);
+                el.setAttribute('rx', reg.rx);
+                el.setAttribute('ry', reg.ry);
+            } else {
+                el = document.createElementNS(ns, 'rect');
+                el.setAttribute('x', reg.x); el.setAttribute('y', reg.y);
+                el.setAttribute('width', reg.w); el.setAttribute('height', reg.h);
+                el.setAttribute('rx', reg.r || 6);
+            }
+            el.setAttribute('class', 'part' + (level ? ' hit-' + level : ''));
+            const title = document.createElementNS(ns, 'title');
+            title.textContent = level ? label + ' — ' + LEVEL_AR[level] : label;
+            el.appendChild(title);
+            return el;
+        }
+
+        function drawView(svgId, view, found) {
+            const svg = document.getElementById(svgId);
+            svg.innerHTML = '';
+            Object.keys(REGIONS).forEach(key => {
+                const reg = REGIONS[key];
+                if (!reg.v.includes(view)) return;
+                const f = found[key];
+                if (reg.pair) {
+                    // أول عنصر = يسار المشاهد. في الوش الأمامي ده يمين الرياضي، وفي الخلفي يساره.
+                    const leftHit = f && (view === 'f' ? f.r : f.l);
+                    const rightHit = f && (view === 'f' ? f.l : f.r);
+                    svg.appendChild(shapeEl(reg, 100 - reg.dx, reg.l, leftHit ? f.level : null));
+                    svg.appendChild(shapeEl(reg, 100 + reg.dx, reg.l, rightHit ? f.level : null));
+                } else {
+                    svg.appendChild(shapeEl(reg, null, reg.l, f ? f.level : null));
+                }
+            });
+        }
+
+        function renderBodyMap(reportText, track2Text) {
+            const found = parsePredictedRisks(reportText, track2Text);
+            drawView('svg-front', 'f', found);
+            drawView('svg-back', 'b', found);
+
+            const legend = document.getElementById('injury-legend');
+            const none = document.getElementById('no-injury');
+            legend.innerHTML = '';
+            const keys = Object.keys(found).sort((a, b) => RANK[found[b].level] - RANK[found[a].level]);
+            if (!keys.length) {
+                none.textContent = reportText
+                    ? 'لم يحدد التقرير مناطق خطر محددة على الجسم.'
+                    : 'ستظهر هنا المناطق الأكثر عرضة للإصابة بعد إجراء التحليل.';
+                return;
+            }
+            none.textContent = '';
+            keys.forEach(k => {
+                const s = found[k];
+                const side = (s.r && s.l) ? '' : s.r ? ' (يمين)' : ' (يسار)';
+                const chip = document.createElement('span');
+                chip.className = 'chip ' + s.level;
+                chip.textContent = REGIONS[k].l + side + ' • ' + LEVEL_AR[s.level];
+                legend.appendChild(chip);
+            });
+        }
+
+        // رسم الجسم فارغاً عند تحميل الصفحة
+        renderBodyMap('', '');
+
     </script>
 </body>
 </html>
